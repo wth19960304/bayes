@@ -1,6 +1,7 @@
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/constant/style.dart';
+import 'package:bayes/dialog/yinshi_diaolog.dart';
 import 'package:bayes/utils/screen_util.dart';
 import 'package:bayes/utils/sp_constant.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +36,10 @@ class _SplashScreenState extends State<SplashPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          // return YinShiDialog();
-          return Text("YinShiDialog11122");
+          return YinShiDialog();
         },
       ).then((value) {
+        print(value);
         if (value != null && value == "right") {
           // 用户同意隐私政策，设置标记并继续导航
           SpUtils().setString("noFirstApp", "true");
