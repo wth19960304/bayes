@@ -9,10 +9,10 @@ class ScreenUtil {
   ScreenUtil._internal();
 
   /// 设计稿的设备宽度
-  final int _designWidth = 0;
+  static final int _designWidth = 360;
 
   /// 设计稿的设备高度
-  final int _designHeight = 0;
+  static final int _designHeight = 360;
 
   /// 屏幕信息
   static MediaQueryData? _mediaQueryData;
@@ -78,24 +78,24 @@ class ScreenUtil {
   static double? get bottomBarHeight => _bottomBarHeight;
 
   /// 计算宽度适配比例
-  double get scaleWidth => _screenWidth! / _designWidth;
+  static double get scaleWidth => _screenWidth! / _designWidth;
 
   /// 计算高度适配比例
-  double get scaleHeight => _screenHeight! / _designHeight;
+  static double get scaleHeight => _screenHeight! / _designHeight;
 
   /// 根据设计稿宽度进行适配
-  double setWidth(int width) => width * scaleWidth;
+  static double setWidth(int width) => width * scaleWidth;
 
   /// 根据设计稿宽度进行适配（别名）
-  double L(double width) => width * scaleWidth;
+  static double L(double width) => width * scaleWidth;
 
   /// 根据设计稿高度进行适配
-  double setHeight(int height) => height * scaleHeight;
+  static double setHeight(int height) => height * scaleHeight;
 
   /// 字体大小适配
   /// [fontSize] 设计稿上的字体大小（px）
   /// [allowFontScaling] 是否允许根据系统字体大小设置进行缩放，默认为 true
-  double setSp(int fontSize, [bool allowFontScaling = true]) {
+  static double setSp(int fontSize, [bool allowFontScaling = true]) {
     double scaledSize = setWidth(fontSize);
     if (allowFontScaling) {
       scaledSize *= _textScaleFactor!;
