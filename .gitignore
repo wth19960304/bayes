@@ -43,3 +43,42 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# IDE配置
+.vscode/
+.idea/
+
+# 系统生成文件
+.DS_Store
+Thumbs.db
+
+# 平台相关构建目录
+/build/
+/ios/
+/linux/
+/macos/
+/windows/
+/test/
+
+# 本地环境文件
+.env
+.env.local
+
+# 依赖目录
+.packages
+.pub-cache/
+
+# 日志文件
+*.log
+flutter_*.log
+
+# 用户生成文件
+*.swp
+*.swo
+*~
+*.lock
+
+# 测试覆盖率
+/coverage/
+
+
