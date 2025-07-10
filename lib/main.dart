@@ -19,6 +19,7 @@ import 'dart:io'; // 平台判断功能
 
 // 项目资源引入
 import 'package:bayes/constant/color.dart'; // 颜色常量定义
+import 'package:bayes/splash_page.dart';
 import 'package:bayes/utils/sp_utils.dart'; // 本地存储工具类
 import 'package:flutter/material.dart'; // Material组件库
 import 'package:flutter/services.dart'; // 系统UI控制
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: KColorConstant.white, // 使用项目白色常量
               platform: TargetPlatform.iOS, // 统一使用iOS风格组件
             ),
-            home: Text("我是首页1111"), // 临时首页占位（实际应为SplashPage）
+            home: SplashPage(), // 临时首页占位（实际应为SplashPage）
           ),
         );
       },
