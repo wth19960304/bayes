@@ -14,6 +14,7 @@ class MeInfoPage extends BaseWidget {
 }
 
 class _MeInfoPageState extends BaseWidgetState {
+  @override
   Widget buildWidget(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().L(15)),
@@ -31,13 +32,16 @@ class _MeInfoPageState extends BaseWidgetState {
     );
   }
 
+  @override
   void onCreate() {
     setTopBarVisible(true);
     setAppBarVisible(true);
     setAppBarTitle("使用协议");
   }
 
+  @override
   void onPause() {}
 
+  @override
   void onResume() {}
 }
