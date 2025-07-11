@@ -1,71 +1,39 @@
-import 'package:flutter/material.dart';
+import 'base_widget.dart';
 
-///loading
-class LoadingDialog extends StatelessWidget {
-  String text;
+///这个管理类，只是标记 当前 按照顺序放入和移除栈名称，并不是页面跳转后退 的功能， 只是方便 推算、表示生命周期方法
+class NavigatorManger {
+  final List<String> _activityStack = <String>[];
 
-  LoadingDialog({Key key, @required this.text}) : super(key: key);
+  NavigatorManger._internal();
 
-  @override
-  Widget build(BuildContext context) {
-    Duration insetAnimationDuration = const Duration(milliseconds: 100);
-    Curve insetAnimationCurve = Curves.decelerate;
+  static final NavigatorManger _singleton = NavigatorManger._internal();
 
-    RoundedRectangleBorder _defaultDialogShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(5.0)));
+  //工厂模式
+  factory NavigatorManger() => _singleton;
 
-    return AnimatedPadding(
-      padding: MediaQuery.of(context).viewInsets +
-          const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
-      duration: insetAnimationDuration,
-      curve: insetAnimationCurve,
-      child: MediaQuery.removeViewInsets(
-        removeLeft: true,
-        removeTop: true,
-        removeRight: true,
-        removeBottom: true,
-        context: context,
-        child: Center(
-          child: SizedBox(
-            width: 120,
-            height: 120,
-            child: Material(
-              elevation: 24.0,
-              color: Theme.of(context).dialogBackgroundColor,
-              type: MaterialType.card,
-              //---------------下面是dialog布局----------------
-              child: Container(
-                decoration: ShapeDecoration(
-                  color: Color(0xffffffff),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
-                    ),
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 20.0,
-                      ),
-                      child: Text(
-                        text,
-                        style: TextStyle(fontSize: 12.0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //-------------上面是dialog的内容布局--------------
-              shape: _defaultDialogShape,
-            ),
-          ),
-        ),
-      ),
-    );
+  void addWidget(BaseWidgetState widgetName) {
+    _activityStack.add(widgetName.getClassName());
+  }
+
+  void removeWidget(BaseWidgetState widgetName) {
+    _activityStack.remove(widgetName.getClassName());
+  }
+
+  bool isTopPage(BaseWidgetState widgetName) {
+    try {
+      return widgetName.getClassName() ==
+          _activityStack[_activityStack.length - 1];
+    } catch (exception) {
+      return false;
+    }
+  }
+
+  bool isSecondTop(BaseWidgetState widgetName) {
+    try {
+      return widgetName.getClassName() ==
+          _activityStack[_activityStack.length - 2];
+    } catch (exception) {
+      return false;
+    }
   }
 }
