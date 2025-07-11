@@ -3,15 +3,21 @@ import 'dart:core';
 import 'package:bayes/base/build_config.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
+import 'package:bayes/constant/style.dart';
+import 'package:bayes/dialog/loading_dialog.dart';
+import 'package:bayes/dialog/share_dialog.dart';
+import 'package:bayes/loginRegister/login_page.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
 import 'package:bayes/utils/screen_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 /// base 类 常用的一些工具类 ， 放在这里就可以了
 abstract mixin class BaseFunction {
   late State _stateBaseFunction;
-  BuildContext _contextBaseFunction;
+  late BuildContext _contextBaseFunction;
 
   bool _isTopBarShow = false; //状态栏是否显示
   bool _isAppBarShow = true; //导航栏是否显示
@@ -132,7 +138,7 @@ abstract mixin class BaseFunction {
     Navigator.push(
       // ignore: use_build_context_synchronously
       _contextBaseFunction,
-      new MaterialPageRoute(builder: (context) => new ComplaintsReleasePage()),
+      MaterialPageRoute(builder: (context) => ComplaintsReleasePage()),
     );
   }
 
@@ -164,7 +170,7 @@ abstract mixin class BaseFunction {
   ///导航栏appBar中间部分 ，不满足可以自行重写
   Widget getAppBarRight() {
     return Text(
-      _appBarRightTitle == null ? "" : _appBarRightTitle,
+      _appBarRightTitle,
       style: TextStyle(fontSize: 14, color: _appBarContentColor),
     );
   }
@@ -174,12 +180,12 @@ abstract mixin class BaseFunction {
     return InkWell(
       onTap: clickAppBarBack,
       child: Container(
-        height: ScreenUtil().L(40),
-        width: ScreenUtil().L(40),
-        margin: EdgeInsets.only(top: ScreenUtil().L(5)),
+        height: ScreenUtil.L(40),
+        width: ScreenUtil.L(40),
+        margin: EdgeInsets.only(top: ScreenUtil.L(5)),
         padding: EdgeInsets.only(
-          left: ScreenUtil().L(12),
-          right: ScreenUtil().L(8),
+          left: ScreenUtil.L(12),
+          right: ScreenUtil.L(8),
         ),
         child: Image.asset(_backIcon),
       ),
@@ -219,7 +225,7 @@ abstract mixin class BaseFunction {
 
   ///返回appbar高度，也就是导航栏高度
   double getAppBarHeight() {
-    return ScreenUtil().L(50);
+    return ScreenUtil.L(50);
   }
 
   ///返回屏幕宽度
@@ -234,23 +240,23 @@ abstract mixin class BaseFunction {
 
   ///加载中展示的布局
   Widget getLoadingWidget() {
-    return Container(
-      height: ScreenUtil.screenHeight - ScreenUtil().L(400),
+    return SizedBox(
+      height: ScreenUtil.screenHeight - ScreenUtil.L(400),
       child: Center(child: CircularProgressIndicator()),
     );
   }
 
   ///数据为空时展示的布局
   Widget getEmptyWidget() {
-    return Container(
-      height: ScreenUtil.screenHeight - ScreenUtil().L(400),
+    return SizedBox(
+      height: ScreenUtil.screenHeight! - ScreenUtil.L(400),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset("images/dataempty.png", width: ScreenUtil().L(120)),
-            Text("$noDataString", style: KFontConstant.grayText()),
+            Image.asset("images/dataempty.png", width: ScreenUtil.L(120)),
+            Text(noDataString, style: KFontConstant.grayText()),
           ],
         ),
       ),
@@ -263,18 +269,15 @@ abstract mixin class BaseFunction {
       onTap: () {
         onClickErrorWidget();
       },
-      child: Container(
-        height: ScreenUtil.screenHeight - ScreenUtil().L(400),
+      child: SizedBox(
+        height: ScreenUtil.screenHeight! - ScreenUtil.L(400),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                "images/loadingerror.png",
-                width: ScreenUtil().L(120),
-              ),
-              Text("$errorString", style: KFontConstant.grayText()),
+              Image.asset("images/loadingerror.png", width: ScreenUtil.L(120)),
+              Text(errorString, style: KFontConstant.grayText()),
             ],
           ),
         ),
@@ -323,19 +326,17 @@ abstract mixin class BaseFunction {
     // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
-      _topBarColor = color == null ? _topBarColor : color;
+      _topBarColor = color;
     });
   }
 
   ///设置导航栏的字体以及图标颜色
   void setAppBarContentColor(Color contentColor) {
-    if (contentColor != null) {
-      // ignore: invalid_use_of_protected_member
-      // ignore: invalid_use_of_protected_member
-      _stateBaseFunction.setState(() {
-        _appBarContentColor = contentColor;
-      });
-    }
+    // ignore: invalid_use_of_protected_member
+    // ignore: invalid_use_of_protected_member
+    _stateBaseFunction.setState(() {
+      _appBarContentColor = contentColor;
+    });
   }
 
   ///设置导航栏隐藏或者显示
@@ -352,28 +353,24 @@ abstract mixin class BaseFunction {
     // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
-      _appBarColor = color == null ? _appBarColor : color;
+      _appBarColor = color;
     });
   }
 
   void setAppBarTitle(String title) {
-    if (title != null) {
-      // ignore: invalid_use_of_protected_member
-      // ignore: invalid_use_of_protected_member
-      _stateBaseFunction.setState(() {
-        _appBarTitle = title;
-      });
-    }
+    // ignore: invalid_use_of_protected_member
+    // ignore: invalid_use_of_protected_member
+    _stateBaseFunction.setState(() {
+      _appBarTitle = title;
+    });
   }
 
   void setAppBarRightTitle(String title) {
-    if (title != null) {
-      // ignore: invalid_use_of_protected_member
-      // ignore: invalid_use_of_protected_member
-      _stateBaseFunction.setState(() {
-        _appBarRightTitle = title;
-      });
-    }
+    // ignore: invalid_use_of_protected_member
+    // ignore: invalid_use_of_protected_member
+    _stateBaseFunction.setState(() {
+      _appBarRightTitle = title;
+    });
   }
 
   bool dialogShowIng = false;
@@ -387,11 +384,10 @@ abstract mixin class BaseFunction {
 
     if (isVisible) {
       if (dialogShowIng) {
-        print("关闭dialog");
         Navigator.pop(_contextBaseFunction);
         dialogShowIng = false;
       }
-      print("启动dialog");
+
       showDialog<Null>(
         context: _contextBaseFunction, //BuildContext对象
         barrierDismissible: false,
@@ -404,7 +400,6 @@ abstract mixin class BaseFunction {
       );
       dialogShowIng = true;
     } else {
-      print("关闭dialog");
       Navigator.pop(_contextBaseFunction); //关闭dialog
       dialogShowIng = false;
     }
@@ -446,17 +441,12 @@ abstract mixin class BaseFunction {
   }
 
   void log(String content) {
+    // ignore: avoid_print, prefer_interpolation_to_compose_strings
     print(getClassName() + "------:" + content);
   }
 
   String getClassName() {
-    if (_contextBaseFunction == null) {
-      return null;
-    }
     String className = _contextBaseFunction.toString();
-    if (className == null) {
-      return null;
-    }
     if (className.indexOf("(") <= 0) {
       return className;
     }
@@ -472,23 +462,21 @@ abstract mixin class BaseFunction {
     Color backColor = Colors.black87,
     Color textColor = KColorConstant.white,
   }) {
-    if (content != null) {
-      if (content != null && content.isNotEmpty) {
-        Fluttertoast.showToast(
-          msg: content,
-          toastLength: length,
-          gravity: gravity,
-          timeInSecForIos: 1,
-          backgroundColor: backColor,
-          textColor: textColor,
-          fontSize: 13.0,
-        );
-      }
+    if (content.isNotEmpty) {
+      Fluttertoast.showToast(
+        msg: content,
+        toastLength: length,
+        gravity: gravity,
+        timeInSecForIosWeb: 1,
+        backgroundColor: backColor,
+        textColor: textColor,
+        fontSize: 13.0,
+      );
     }
   }
 
   ///根据不同的状态返回不同的widget，全部居中显示
-  Widget baseStatueWidget(LoadingWidgetStatue pageStatue) {
+  Widget? baseStatueWidget(LoadingWidgetStatue pageStatue) {
     if (pageStatue == LoadingWidgetStatue.LOADING) {
       return Center(child: getLoadingWidget());
     }
@@ -498,6 +486,7 @@ abstract mixin class BaseFunction {
     if (pageStatue == LoadingWidgetStatue.DATAEMPTY) {
       return Center(child: getEmptyWidget());
     }
+    return null;
   }
 
   ///判断错误是否是取消请求
@@ -506,7 +495,7 @@ abstract mixin class BaseFunction {
   }
 
   String millsTime2Time(String millisTime) {
-    if (millisTime == null || millisTime.length < 5) {
+    if (millisTime.length < 5) {
       return "--";
     }
     //带毫秒的时间
@@ -525,7 +514,7 @@ abstract mixin class BaseFunction {
       showToast("登录过期了，重新登录");
       Navigator.push(
         _contextBaseFunction,
-        new MaterialPageRoute(builder: (context) => new LoginPage()),
+        MaterialPageRoute(builder: (context) => LoginPage()),
       );
     }
   }
@@ -537,21 +526,23 @@ abstract mixin class BaseFunction {
 
   ///通用下一步按钮
   Widget raisedNextButton(String text, {int buttonTag = 0}) {
-    return RaisedButton(
+    return ElevatedButton(
       onPressed: () {
         btnNext(buttonTag);
       },
-      textColor: KColorConstant.white,
-      clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(100.0)),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.transparent, // 移除textColor改用样式控制
+        padding: EdgeInsets.zero, // 整合padding到样式
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100.0),
+        ),
+        minimumSize: Size(0, 40), // 控制最小高度
       ),
-      padding: const EdgeInsets.all(0.0),
       child: Container(
-        height: ScreenUtil().L(40),
+        height: ScreenUtil.L(40),
         decoration: buttonTag == 0
-            ? KBoxStyle.next_btn()
-            : KBoxStyle.next_btn_gray(),
+            ? KBoxStyle.nextBtn()
+            : KBoxStyle.nextBtnGray(),
         child: Container(
           alignment: Alignment.center,
           child: Text(text, style: KFontConstant.whiteTextBig()),
@@ -565,8 +556,8 @@ abstract mixin class BaseFunction {
 
   ///统一输入框样式
   InputDecoration inputDecoration({
-    String label,
-    String errorString,
+    required String label,
+    required String errorString,
     bool error = false,
   }) {
     if (error) {
@@ -576,7 +567,12 @@ abstract mixin class BaseFunction {
     }
   }
 
-  showShareDialog({String title, String type, String id, String videoType}) {
+  showShareDialog({
+    required String title,
+    required String type,
+    required String id,
+    required String videoType,
+  }) {
     showDialog<int>(
       context: _contextBaseFunction, //BuildContext对象
       barrierDismissible: true,
@@ -592,4 +588,5 @@ abstract mixin class BaseFunction {
   }
 }
 
+// ignore: constant_identifier_names
 enum LoadingWidgetStatue { NONE, LOADING, ERROR, DATAEMPTY, NOTLOGIN }
