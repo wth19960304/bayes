@@ -23,7 +23,6 @@ abstract mixin class BaseFunction {
   bool _isAppBarShow = true; //导航栏是否显示
 
   Color _topBarColor = KColorConstant.white;
-  Color _appBarColor = KColorConstant.white;
   Color _appBarContentColor = KColorConstant.white;
   String _backIcon = "images/left_go.png";
 
@@ -352,9 +351,7 @@ abstract mixin class BaseFunction {
   void setAppBarBackColor(Color color) {
     // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
-    _stateBaseFunction.setState(() {
-      _appBarColor = color;
-    });
+    _stateBaseFunction.setState(() {});
   }
 
   void setAppBarTitle(String title) {
