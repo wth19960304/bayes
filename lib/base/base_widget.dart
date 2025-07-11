@@ -1,7 +1,5 @@
 import 'package:bayes/base/common_function.dart';
 import 'package:bayes/base/navigator_manger.dart';
-import 'package:bayes/constant/length.dart';
-import 'package:bayes/utils/screen_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
