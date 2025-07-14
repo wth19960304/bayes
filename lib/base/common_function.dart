@@ -4,7 +4,7 @@ import 'package:bayes/base/build_config.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/constant/style.dart';
-import 'package:bayes/dialog/loading_dialog%20copy.dart';
+import 'package:bayes/dialog/loading_dialog.dart';
 import 'package:bayes/dialog/share_dialog.dart';
 import 'package:bayes/loginRegister/login_page.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
