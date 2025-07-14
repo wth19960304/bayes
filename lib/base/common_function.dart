@@ -4,7 +4,7 @@ import 'package:bayes/base/build_config.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/constant/style.dart';
-import 'package:bayes/dialog/loading_dialog.dart';
+import 'package:bayes/dialog/loading_dialog%20copy.dart';
 import 'package:bayes/dialog/share_dialog.dart';
 import 'package:bayes/loginRegister/login_page.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
@@ -13,6 +13,7 @@ import 'package:bayes/utils/screen_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 /// base 类 常用的一些工具类 ， 放在这里就可以了
 abstract mixin class BaseFunction {
@@ -137,7 +138,11 @@ abstract mixin class BaseFunction {
     Navigator.push(
       // ignore: use_build_context_synchronously
       _contextBaseFunction,
-      MaterialPageRoute(builder: (context) => ComplaintsReleasePage()),
+      MaterialPageRoute(
+        builder: (context) =>
+            // ComplaintsReleasePage()
+            Text("wth"),
+      ),
     );
   }
 
@@ -163,7 +168,7 @@ abstract mixin class BaseFunction {
 
   ///导航栏appBar中间部分 ，不满足可以自行重写
   Widget getAppBarCenter() {
-    return Text(_appBarTitle, style: KFontConstant.appBarTiltleBig_bold());
+    return Text(_appBarTitle, style: KFontConstant.appBarTiltleBigBold());
   }
 
   ///导航栏appBar中间部分 ，不满足可以自行重写
@@ -240,7 +245,7 @@ abstract mixin class BaseFunction {
   ///加载中展示的布局
   Widget getLoadingWidget() {
     return SizedBox(
-      height: ScreenUtil.screenHeight - ScreenUtil.L(400),
+      height: ScreenUtil.screenHeight! - ScreenUtil.L(400),
       child: Center(child: CircularProgressIndicator()),
     );
   }
@@ -579,6 +584,7 @@ abstract mixin class BaseFunction {
           type: type,
           id: id,
           videoType: videoType,
+          url: '',
         );
       },
     );
