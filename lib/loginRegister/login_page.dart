@@ -1,4 +1,16 @@
 import 'package:bayes/base/base_widget.dart';
+import 'package:bayes/bean/login_model.dart';
+import 'package:bayes/constant/font.dart';
+import 'package:bayes/network/intercept/showloading_intercept.dart';
+import 'package:bayes/network/requestUtil.dart';
+import 'package:bayes/userInfo/MeInfoPage.dart';
+import 'package:bayes/utils/fluwx_util.dart';
+import 'package:bayes/utils/screen_util.dart';
+import 'package:bayes/utils/sp_constant.dart';
+import 'package:bayes/utils/sp_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:fluwx/fluwx.dart';
+import 'package:tencent_kit/tencent_kit.dart';
 
 ///登录
 // ignore: must_be_immutable
@@ -14,6 +26,7 @@ class LoginPage extends BaseWidget {
 class _LoginPageState extends BaseWidgetState<LoginPage> {
   TextEditingController userController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
+  // ignore: prefer_typing_uninitialized_variables
   var key;
   bool phoneError = false;
 
@@ -23,7 +36,7 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       children: <Widget>[
         Image.asset(
           "images/login_bg.png",
-          height: getImageHeight(750, 404, ScreenUtil.screenWidth),
+          height: getImageHeight(750, 404, ScreenUtil.screenWidth ?? 0),
           width: ScreenUtil.screenWidth,
           fit: BoxFit.fill,
         ),
@@ -32,28 +45,30 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(
-                left: ScreenUtil().L(30),
-                right: ScreenUtil().L(30),
+                left: ScreenUtil.L(30),
+                right: ScreenUtil.L(30),
               ),
               child: Column(
                 children: <Widget>[
                   Container(
                     alignment: Alignment.topCenter,
+                    // ignore: sort_child_properties_last
                     child: Image.asset(
                       "images/login_logo.png",
-                      height: getImageHeight(202, 255, ScreenUtil().L(100)),
-                      width: ScreenUtil().L(100),
+                      height: getImageHeight(202, 255, ScreenUtil.L(100)),
+                      width: ScreenUtil.L(100),
                       fit: BoxFit.fill,
                     ),
-                    margin: EdgeInsets.only(top: ScreenUtil().L(35)),
+                    margin: EdgeInsets.only(top: ScreenUtil.L(35)),
                   ),
                   Container(
                     alignment: Alignment.topCenter,
+                    // ignore: sort_child_properties_last
                     child: Text("欢迎来到贝叶斯数学", style: KFontConstant.grayText()),
-                    margin: EdgeInsets.only(top: ScreenUtil().L(10)),
+                    margin: EdgeInsets.only(top: ScreenUtil.L(10)),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: ScreenUtil().L(30)),
+                    margin: EdgeInsets.only(top: ScreenUtil.L(30)),
                     child: TextField(
                       style: KFontConstant.blackTextBig(),
                       controller: userController,
@@ -66,7 +81,7 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: ScreenUtil().L(10)),
+                    margin: EdgeInsets.only(top: ScreenUtil.L(10)),
                     child: TextField(
                       obscureText: true,
                       style: KFontConstant.blackTextBig(),
@@ -80,17 +95,17 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                      top: ScreenUtil().L(30),
-                      left: ScreenUtil().L(30),
-                      right: ScreenUtil().L(30),
+                      top: ScreenUtil.L(30),
+                      left: ScreenUtil.L(30),
+                      right: ScreenUtil.L(30),
                     ),
                     child: raisedNextButton("登录"),
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                      top: ScreenUtil().L(20),
-                      left: ScreenUtil().L(30),
-                      right: ScreenUtil().L(30),
+                      top: ScreenUtil.L(20),
+                      left: ScreenUtil.L(30),
+                      right: ScreenUtil.L(30),
                     ),
                     child: raisedNextButton("注册", buttonTag: 1),
                   ),
@@ -111,46 +126,46 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   bool isQQInstalled = true;
 
   _initFluwx() async {
-    await fluwx.registerWxApi(
+    await FluwxUtil.instance.registerApi(
       appId: "wxa4a5f5d0d85630a2",
       doOnAndroid: true,
       doOnIOS: true,
     );
     //是否安装了微信
-    isWeChatInstalled = await fluwx.isWeChatInstalled;
+    isWeChatInstalled = await FluwxUtil.instance.isWeChatInstalled;
   }
 
   _initFluQQ() async {
-    FlutterQq.registerQQ('101887594');
-    isQQInstalled = await FlutterQq.isQQInstalled();
+    TencentKitPlatform.instance.registerApp(appId: "101887594");
+    isQQInstalled = await TencentKitPlatform.instance.isQQInstalled();
   }
 
   _fluQQLogin() async {
-    try {
-      var qqResult = await FlutterQq.login();
-      String output;
-      if (qqResult.code == 0) {
-        output = "登录成功${qqResult.response}";
-        _qqLoginHttp(
-          openid: qqResult.response['openid'],
-          code: qqResult.response['accessToken'],
-        );
-      } else if (qqResult.code == 1) {
-        output = "登录失败" + qqResult.message;
-      } else {
-        output = "用户取消";
-      }
-      print(output);
-    } catch (error) {
-      print("flutter_plugin_qq_example:$error");
-    }
+    await TencentKitPlatform.instance.login(
+      scope: <String>[TencentScope.kGetSimpleUserInfo],
+    );
+    // String output;
+    // if (qqResult.code == 0) {
+    //   output = "登录成功${qqResult.response}";
+    //   _qqLoginHttp(
+    //     openid: qqResult.response['openid'],
+    //     code: qqResult.response['accessToken'],
+    //   );
+    // } else if (qqResult.code == 1) {
+    //   output = "登录失败" + qqResult.message;
+    // } else {
+    //   output = "用户取消";
+    // }
+    // print(output);
   }
 
   void _wxLogin() {
+    final request = NormalAuth(
+      scope: "snsapi_userinfo", // 授权作用域
+      state: "wechat_sdk_demo_test", // 防CSRF标识
+    );
     //发起用户授权
-    fluwx
-        .sendWeChatAuth(scope: "snsapi_userinfo", state: "wechat_sdk_demo_test")
-        .then((data) {});
+    FluwxUtil.instance.authBy(which: request).then((data) {});
   }
 
   bool select = true;
@@ -161,101 +176,101 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     if (!wxChatInstalled) {
       return Container();
     }
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(bottom: ScreenUtil().L(5)),
-                child: Text(
-                  "------ 其它登录方式 ------",
-                  style: KFontConstant.grayText(),
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(bottom: ScreenUtil.L(5)),
+              child: Text(
+                "------ 其它登录方式 ------",
+                style: KFontConstant.grayText(),
               ),
-              Row(
-                children: <Widget>[
-                  InkWell(
+            ),
+            Row(
+              children: <Widget>[
+                InkWell(
+                  onTap: () {
+                    _weixinLogin();
+                  },
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: ScreenUtil.L(50),
+                        width: ScreenUtil.L(50),
+                        padding: EdgeInsets.all(ScreenUtil.L(10)),
+                        child: Image.asset("images/icon_wx.png"),
+                      ),
+                      Text("微信登录", style: KFontConstant.grayTextSmall()),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: ScreenUtil.L(40)),
+                  child: InkWell(
                     onTap: () {
-                      _weixinLogin();
+                      _qqLogin();
                     },
                     child: Column(
                       children: <Widget>[
                         Container(
-                          height: ScreenUtil().L(50),
-                          width: ScreenUtil().L(50),
-                          padding: EdgeInsets.all(ScreenUtil().L(10)),
-                          child: Image.asset("images/icon_wx.png"),
+                          height: ScreenUtil.L(45),
+                          width: ScreenUtil.L(45),
+                          padding: EdgeInsets.all(ScreenUtil.L(10)),
+                          child: Image.asset("images/icon_qq.png"),
                         ),
-                        Text("微信登录", style: KFontConstant.grayText_small()),
+                        Text("QQ登录", style: KFontConstant.grayTextSmall()),
                       ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(left: ScreenUtil().L(40)),
-                    child: InkWell(
-                      onTap: () {
-                        _qqLogin();
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            height: ScreenUtil().L(45),
-                            width: ScreenUtil().L(45),
-                            padding: EdgeInsets.all(ScreenUtil().L(10)),
-                            child: Image.asset("images/icon_qq.png"),
-                          ),
-                          Text("QQ登录", style: KFontConstant.grayText_small()),
-                        ],
+                ),
+              ],
+            ),
+            Container(height: ScreenUtil.L(10)),
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: <Widget>[
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      select = !select;
+                    });
+                  },
+                  child: Image.asset(
+                    select
+                        ? "images/icon_check_true.png"
+                        : "images/icon_check_false.png",
+                    width: ScreenUtil.L(30),
+                  ),
+                ),
+                Text("我已阅读并同意"),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MeInfoPage()),
+                    );
+                  },
+                  child: Text("《用户协议》", style: KFontConstant.themeText()),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            // TextPage()
+                            Text("wth"),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(height: ScreenUtil().L(10)),
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        select = !select;
-                      });
-                    },
-                    child: Image.asset(
-                      select
-                          ? "images/icon_check_true.png"
-                          : "images/icon_check_false.png",
-                      width: ScreenUtil().L(30),
-                    ),
-                  ),
-                  Text("我已阅读并同意"),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MeInfoPage(),
-                        ),
-                      );
-                    },
-                    child: Text("《用户协议》", style: KFontConstant.themeText()),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => TextPage()),
-                      );
-                    },
-                    child: Text("《隐私政策》", style: KFontConstant.themeText()),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+                    );
+                  },
+                  child: Text("《隐私政策》", style: KFontConstant.themeText()),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -269,7 +284,8 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   }
 
   ///微信登录
-  _loginToWx({String code}) {
+  // ignore: unused_element
+  _loginToWx({required String code}) {
     var formData = {"code": code, "type": "APP"};
     RequestMap.weChatLogin(ShowLoadingIntercept(this), formData).listen(
       (da) {
@@ -278,11 +294,13 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => RegisterPhonePage(
-                openId: "${da.data.openId}",
-                nickname: da.data.nickname,
-                headImg: da.data.headImg,
-              ),
+              builder: (context) =>
+                  // RegisterPhonePage(
+                  //   openId: "${da.data.openId}",
+                  //   nickname: da.data.nickname,
+                  //   headImg: da.data.headImg,
+                  // )
+                  Text("wth"),
             ),
           );
           return;
@@ -296,9 +314,9 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   }
 
   ///QQ登录
-  _qqLoginHttp({String code, String openid}) {
+  // ignore: unused_element
+  _qqLoginHttp({required String code, required String openid}) {
     var formData = {"accessToken": code, "openid": openid};
-    print(formData);
     RequestMap.qqLogin(ShowLoadingIntercept(this), formData).listen(
       (da) {
         if (da.data.openId != null && da.data.openId != "") {
@@ -306,12 +324,14 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => RegisterPhonePage(
-                openId: "${da.data.openId}",
-                nickname: da.data.nickname,
-                headImg: da.data.headImg,
-                isQQ: true,
-              ),
+              builder: (context) =>
+                  // RegisterPhonePage(
+                  //   openId: "${da.data.openId}",
+                  //   nickname: da.data.nickname,
+                  //   headImg: da.data.headImg,
+                  //   isQQ: true,
+                  // )
+                  Text("wth"),
             ),
           );
           return;
@@ -330,12 +350,14 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     SpUtils().setString(SpConstanst.USER_NAME, userController.text);
     showToast("登录成功");
 
-    if (da.data.user == null || da.data.user.position == "") {
+    if (da.data.user.position == "") {
       //前往完善资料界面
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => FirstUserInfoPage(login: true),
+          builder: (context) =>
+              // FirstUserInfoPage(login: true)
+              Text("wth"),
         ),
       );
       return;
@@ -343,7 +365,11 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     Navigator.of(context).pop();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MainPage()),
+      MaterialPageRoute(
+        builder: (context) =>
+            // MainPage()
+            Text("wth"),
+      ),
     );
   }
 
@@ -368,14 +394,18 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       //前往注册界面
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => RegisterPhonePage()),
+        MaterialPageRoute(
+          builder: (context) =>
+              // RegisterPhonePage()
+              Text("wth"),
+        ),
       );
     }
   }
 
   ///登录
   _login() {
-    if (pwdController.text.length == 0) {
+    if (pwdController.text.isEmpty) {
       showToast("密码不能为空");
       return;
     }
@@ -397,7 +427,6 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       "phoneNum": phoneNum,
       "password": password,
     };
-    print("value -- ${formData.toString()}");
 
     RequestMap.loginIn(ShowLoadingIntercept(this), formData).listen(
       (da) {
@@ -413,30 +442,13 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   void onCreate() {
     setAppBarVisible(false);
     setFloatingShow(false);
-    userController.text = SpUtils().getString(SpConstanst.USER_NAME);
-    pwdController.text = SpUtils().getString(SpConstanst.USER_PWD);
+    userController.text = SpUtils().getString(SpConstanst.USER_NAME)!;
+    pwdController.text = SpUtils().getString(SpConstanst.USER_PWD)!;
     SpUtils().setString(SpConstanst.USER_TOKEN, "");
     SpUtils().setString(SpConstanst.USER_ID, "");
     _initFluwx();
     _initFluQQ();
     //监听获取code的回调
-    fluwx.weChatResponseEventHandler.distinct((a, b) => a == b).listen((res) {
-      if (res is fluwx.WeChatAuthResponse) {
-        setState(() {
-          if (res.errCode == 0) {
-            _loginToWx(code: res.code);
-            //            getAccToken(res.code).then((data) {
-            //              print(data.toString());
-            //              var datas = json.decode(data.toString());
-            //              String access_token = datas["access_token"];
-            //              String openId = datas["openid"];
-            //              SpUtils().setString(SpConstanst.WX_ACCESS_TOKEN, access_token);
-            //              showToast("$access_token");
-            //            });
-          }
-        });
-      }
-    });
   }
 
   @override
@@ -444,11 +456,4 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
 
   @override
   void onResume() {}
-
-  @override
-  void onDestory() {
-    super.onDestory();
-    pwdController = null;
-    userController = null;
-  }
 }

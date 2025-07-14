@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 ///loading
+// ignore: must_be_immutable
 class LoadingDialog extends StatelessWidget {
   String text;
 
-  LoadingDialog({Key key, @required this.text}) : super(key: key);
+  // ignore: use_super_parameters
+  LoadingDialog({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
