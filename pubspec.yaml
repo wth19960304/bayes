@@ -14,7 +14,7 @@ dependencies:
   shared_preferences: ^2.5.3
   flutter_screenutil: ^5.0.1
   fluttertoast: ^8.0.8
-    fluwx: ^5.6.0
+  fluwx: ^5.6.0
   tencent_kit: ^6.2.0
 
 dev_dependencies:
