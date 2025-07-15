@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import 'package:bayes/base/build_config.dart';
-import 'package:bayes/base/common_function%20copy.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/constant/style.dart';
@@ -112,7 +111,7 @@ abstract mixin class BaseFunction {
   getUserInfo() {
     var formData = {"page": "1"};
     RequestMap.getUserInfo(
-      ShowLoadingIntercept(this as BaseFuntion, isInit: true),
+      ShowLoadingIntercept(this, isInit: true),
       formData,
     ).listen(
       (data) {
