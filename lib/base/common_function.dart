@@ -1,4 +1,7 @@
+import 'dart:core';
+
 import 'package:bayes/base/build_config.dart';
+import 'package:bayes/base/common_function%20copy.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/constant/style.dart';
@@ -14,7 +17,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// base 类 常用的一些工具类 ， 放在这里就可以了
-abstract class BaseFuntion {
+abstract mixin class BaseFunction {
   late State _stateBaseFunction;
   late BuildContext _contextBaseFunction;
 
@@ -45,6 +48,7 @@ abstract class BaseFuntion {
   }
 
   void setNoDataString(String value) {
+    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       noDataString = value;
@@ -87,8 +91,7 @@ abstract class BaseFuntion {
   Widget? FloatingAction() {
     if (floatingShow == false) {
       return null;
-    } else
-      // ignore: curly_braces_in_flow_control_structures
+    } else {
       return Container(
         margin: EdgeInsets.only(bottom: ScreenUtil.L(50)),
         child: FloatingActionButton(
@@ -98,6 +101,7 @@ abstract class BaseFuntion {
           },
         ),
       );
+    }
   }
 
   goTucao() {
@@ -108,7 +112,7 @@ abstract class BaseFuntion {
   getUserInfo() {
     var formData = {"page": "1"};
     RequestMap.getUserInfo(
-      ShowLoadingIntercept(this, isInit: true),
+      ShowLoadingIntercept(this as BaseFuntion, isInit: true),
       formData,
     ).listen(
       (data) {
@@ -171,7 +175,7 @@ abstract class BaseFuntion {
   ///导航栏appBar中间部分 ，不满足可以自行重写
   Widget getAppBarRight() {
     return Text(
-      _appBarRightTitle ?? "",
+      _appBarRightTitle,
       style: TextStyle(fontSize: 14, color: _appBarContentColor),
     );
   }
@@ -316,6 +320,7 @@ abstract class BaseFuntion {
   ///设置状态栏隐藏或者显示
   void setTopBarVisible(bool isVisible) {
     // ignore: invalid_use_of_protected_member
+    // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _isTopBarShow = isVisible;
     });
@@ -323,6 +328,7 @@ abstract class BaseFuntion {
 
   ///默认这个状态栏下，设置颜色
   void setTopBarBackColor(Color color) {
+    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _topBarColor = color;
@@ -332,6 +338,7 @@ abstract class BaseFuntion {
   ///设置导航栏的字体以及图标颜色
   void setAppBarContentColor(Color contentColor) {
     // ignore: invalid_use_of_protected_member
+    // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _appBarContentColor = contentColor;
     });
@@ -339,6 +346,7 @@ abstract class BaseFuntion {
 
   ///设置导航栏隐藏或者显示
   void setAppBarVisible(bool isVisible) {
+    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _isAppBarShow = isVisible;
@@ -348,10 +356,12 @@ abstract class BaseFuntion {
   ///默认这个导航栏下，设置颜色
   void setAppBarBackColor(Color color) {
     // ignore: invalid_use_of_protected_member
+    // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {});
   }
 
   void setAppBarTitle(String title) {
+    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _appBarTitle = title;
@@ -359,6 +369,7 @@ abstract class BaseFuntion {
   }
 
   void setAppBarRightTitle(String title) {
+    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _appBarRightTitle = title;
@@ -399,6 +410,7 @@ abstract class BaseFuntion {
 
   void setBackIcon({String backIcon = "images/back.png"}) {
     // ignore: invalid_use_of_protected_member
+    // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _backIcon = backIcon;
     });
@@ -432,7 +444,8 @@ abstract class BaseFuntion {
   }
 
   void log(String content) {
-    print("${getClassName()}------:$content");
+    // ignore: avoid_print, prefer_interpolation_to_compose_strings
+    print(getClassName() + "------:" + content);
   }
 
   String getClassName() {
@@ -521,13 +534,12 @@ abstract class BaseFuntion {
         btnNext(buttonTag);
       },
       style: ElevatedButton.styleFrom(
-        foregroundColor: KColorConstant.white, // 替代textColor
-        padding: EdgeInsets.zero, // 替代padding
+        backgroundColor: Colors.transparent, // 移除textColor改用样式控制
+        padding: EdgeInsets.zero, // 整合padding到样式
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100.0), // 保持圆角
+          borderRadius: BorderRadius.circular(100.0),
         ),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap, // 替代clipBehavior
-        elevation: 0, // 禁用默认阴影
+        minimumSize: Size(0, 40), // 控制最小高度
       ),
       child: Container(
         height: ScreenUtil.L(40),
