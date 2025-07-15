@@ -1,5 +1,3 @@
-import 'dart:core';
-
 import 'package:bayes/base/build_config.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
@@ -16,7 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// base 类 常用的一些工具类 ， 放在这里就可以了
-abstract mixin class BaseFunction {
+abstract class BaseFuntion {
   late State _stateBaseFunction;
   late BuildContext _contextBaseFunction;
 
@@ -47,7 +45,6 @@ abstract mixin class BaseFunction {
   }
 
   void setNoDataString(String value) {
-    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       noDataString = value;
@@ -90,7 +87,8 @@ abstract mixin class BaseFunction {
   Widget? FloatingAction() {
     if (floatingShow == false) {
       return null;
-    } else {
+    } else
+      // ignore: curly_braces_in_flow_control_structures
       return Container(
         margin: EdgeInsets.only(bottom: ScreenUtil.L(50)),
         child: FloatingActionButton(
@@ -100,7 +98,6 @@ abstract mixin class BaseFunction {
           },
         ),
       );
-    }
   }
 
   goTucao() {
@@ -174,7 +171,7 @@ abstract mixin class BaseFunction {
   ///导航栏appBar中间部分 ，不满足可以自行重写
   Widget getAppBarRight() {
     return Text(
-      _appBarRightTitle,
+      _appBarRightTitle ?? "",
       style: TextStyle(fontSize: 14, color: _appBarContentColor),
     );
   }
@@ -319,7 +316,6 @@ abstract mixin class BaseFunction {
   ///设置状态栏隐藏或者显示
   void setTopBarVisible(bool isVisible) {
     // ignore: invalid_use_of_protected_member
-    // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _isTopBarShow = isVisible;
     });
@@ -327,7 +323,6 @@ abstract mixin class BaseFunction {
 
   ///默认这个状态栏下，设置颜色
   void setTopBarBackColor(Color color) {
-    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _topBarColor = color;
@@ -337,7 +332,6 @@ abstract mixin class BaseFunction {
   ///设置导航栏的字体以及图标颜色
   void setAppBarContentColor(Color contentColor) {
     // ignore: invalid_use_of_protected_member
-    // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _appBarContentColor = contentColor;
     });
@@ -345,7 +339,6 @@ abstract mixin class BaseFunction {
 
   ///设置导航栏隐藏或者显示
   void setAppBarVisible(bool isVisible) {
-    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _isAppBarShow = isVisible;
@@ -355,12 +348,10 @@ abstract mixin class BaseFunction {
   ///默认这个导航栏下，设置颜色
   void setAppBarBackColor(Color color) {
     // ignore: invalid_use_of_protected_member
-    // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {});
   }
 
   void setAppBarTitle(String title) {
-    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _appBarTitle = title;
@@ -368,7 +359,6 @@ abstract mixin class BaseFunction {
   }
 
   void setAppBarRightTitle(String title) {
-    // ignore: invalid_use_of_protected_member
     // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _appBarRightTitle = title;
@@ -409,7 +399,6 @@ abstract mixin class BaseFunction {
 
   void setBackIcon({String backIcon = "images/back.png"}) {
     // ignore: invalid_use_of_protected_member
-    // ignore: invalid_use_of_protected_member
     _stateBaseFunction.setState(() {
       _backIcon = backIcon;
     });
@@ -443,8 +432,7 @@ abstract mixin class BaseFunction {
   }
 
   void log(String content) {
-    // ignore: avoid_print, prefer_interpolation_to_compose_strings
-    print(getClassName() + "------:" + content);
+    print("${getClassName()}------:$content");
   }
 
   String getClassName() {
@@ -533,12 +521,13 @@ abstract mixin class BaseFunction {
         btnNext(buttonTag);
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent, // 移除textColor改用样式控制
-        padding: EdgeInsets.zero, // 整合padding到样式
+        foregroundColor: KColorConstant.white, // 替代textColor
+        padding: EdgeInsets.zero, // 替代padding
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100.0),
+          borderRadius: BorderRadius.circular(100.0), // 保持圆角
         ),
-        minimumSize: Size(0, 40), // 控制最小高度
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap, // 替代clipBehavior
+        elevation: 0, // 禁用默认阴影
       ),
       child: Container(
         height: ScreenUtil.L(40),
