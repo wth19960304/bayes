@@ -1,9 +1,38 @@
+import 'package:bayes/bean/CourseMangeModel.dart';
+import 'package:bayes/bean/ShouChangVideoBean.dart';
+import 'package:bayes/bean/XuexiJiluBean.dart';
+import 'package:bayes/bean/city_model.dart';
+import 'package:bayes/bean/kechengvideo_model.dart';
 import 'package:bayes/bean/login_model.dart';
+import 'package:bayes/bean/message_model.dart';
 import 'package:bayes/network/NWApi.dart';
 import 'package:bayes/network/api.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'intercept/base_intercept.dart';
+
+import 'package:bayes/bean/DefaultBean.dart';
+import 'package:bayes/bean/StringBean.dart';
+import 'package:bayes/bean/ImagePutBean.dart';
+import 'package:bayes/bean/ComplainlistBean.dart';
+import 'package:bayes/bean/StudyHomeBean.dart';
+import 'package:bayes/bean/CommentBean.dart';
+import 'package:bayes/bean/VideoDetailBean.dart';
+import 'package:bayes/bean/CourseVideoDetailBean.dart';
+import 'package:bayes/bean/TestHomeBean.dart';
+import 'package:bayes/bean/TestSelectBean.dart';
+import 'package:bayes/bean/TestBean.dart';
+import 'package:bayes/bean/DatiJlBean.dart';
+import 'package:bayes/bean/DatiJlListBean.dart';
+import 'package:bayes/bean/UserInfoBean.dart';
+import 'package:bayes/bean/NianjiBean.dart';
+import 'package:bayes/bean/KeChengListBean.dart';
+import 'package:bayes/bean/ShiTiListBean.dart';
+import 'package:bayes/bean/WoDePingLunBean.dart';
+import 'package:bayes/bean/WoDeShouCangBean.dart';
+import 'package:bayes/bean/ChengjiuModel.dart';
+import 'package:bayes/bean/XuexiTongjiModel.dart';
+import 'package:bayes/bean/GetMessageModel.dart';
 
 ///网络请求接口
 ///EntityFactory需要在该文件添加类名判断
@@ -154,6 +183,7 @@ class RequestMap {
   }
 
   ///学习首页
+  // ignore: non_constant_identifier_names
   static PublishSubject<StudyHomeBean> StudyHome<BaseResponse>(
     BaseIntercept baseIntercept,
     formData,

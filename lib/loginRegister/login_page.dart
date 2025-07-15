@@ -289,7 +289,7 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     var formData = {"code": code, "type": "APP"};
     RequestMap.weChatLogin(ShowLoadingIntercept(this), formData).listen(
       (da) {
-        if (da.data.openId != null && da.data.openId != "") {
+        if (da.data?.openId != null && da.data?.openId != "") {
           //前往绑定手机号码界面
           Navigator.push(
             context,
@@ -319,7 +319,7 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     var formData = {"accessToken": code, "openid": openid};
     RequestMap.qqLogin(ShowLoadingIntercept(this), formData).listen(
       (da) {
-        if (da.data.openId != null && da.data.openId != "") {
+        if (da.data?.openId != null && da.data?.openId != "") {
           //前往绑定手机号码界面
           Navigator.push(
             context,

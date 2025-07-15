@@ -17,7 +17,8 @@ class _MeInfoPageState extends BaseWidgetState {
   @override
   Widget buildWidget(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().L(15)),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(15)),
+
       child: Text(
         "承诺：<贝叶斯数学>包含高中数学全部三阶课程（基础篇+题型篇+冲刺篇）永久免费\n\n"
         " 如果有意见，请发送到邮箱：luojunfuture@gmail.com\n\n"

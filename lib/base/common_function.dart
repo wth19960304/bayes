@@ -115,7 +115,7 @@ abstract mixin class BaseFunction {
       formData,
     ).listen(
       (data) {
-        if (data.data.state == "1") {
+        if (data.data?.state == "1") {
           showToast("您的账号没有权限，详情前往消息中心查看", length: Toast.LENGTH_LONG);
           return;
         } else {
