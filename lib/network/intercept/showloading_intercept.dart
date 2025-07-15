@@ -1,10 +1,12 @@
-import 'package:erp_music/base/common_function.dart';
-
-import 'base_intercept.dart';
+import 'package:bayes/base/common_function.dart';
+import 'package:bayes/network/intercept/base_intercept.dart';
 
 class ShowLoadingIntercept extends BaseIntercept {
-  ShowLoadingIntercept(BaseFuntion baseFuntion,
-      {bool isDefaultFailure = true, bool isInit = false}) {
+  ShowLoadingIntercept(
+    BaseFunction baseFuntion, {
+    bool isDefaultFailure = true,
+    bool isInit = false,
+  }) {
     this.baseFuntion = baseFuntion;
     this.isDefaultFailure = isDefaultFailure;
     this.isInit = isInit;
@@ -12,23 +14,16 @@ class ShowLoadingIntercept extends BaseIntercept {
 
   @override
   void afterRequest() {
-    if (baseFuntion != null) {
-      baseFuntion.showDiaolog(false, isInit);
-      print(isInit);
-    }
+    baseFuntion.showDiaolog(false, isInit);
   }
 
   @override
   void beforeRequest() {
-    if (baseFuntion != null) {
-      baseFuntion.showDiaolog(true, isInit);
-    }
+    baseFuntion.showDiaolog(true, isInit);
   }
 
   @override
   void loginExpiration() {
-    if (baseFuntion != null) {
-      baseFuntion.toLoginPage();
-    }
+    baseFuntion.toLoginPage();
   }
 }
