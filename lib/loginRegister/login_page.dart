@@ -345,12 +345,12 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   }
 
   _loginSuncess(LoginBean da) {
-    SpUtils().setString(SpConstanst.USER_TOKEN, da.data.token);
+    SpUtils().setString(SpConstanst.USER_TOKEN, da.data!.token ?? "");
     SpUtils().setString(SpConstanst.USER_PWD, pwdController.text);
     SpUtils().setString(SpConstanst.USER_NAME, userController.text);
     showToast("登录成功");
 
-    if (da.data.user.position == "") {
+    if (da.data?.user?.position == "") {
       //前往完善资料界面
       Navigator.push(
         context,
