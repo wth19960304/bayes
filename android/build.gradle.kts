@@ -1,5 +1,13 @@
 allprojects {
     repositories {
+        // 腾讯云镜像（新增）
+        maven { url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/") }
+        // 华为云（首推）
+        maven { url = uri("https://mirrors.huaweicloud.com/repository/maven/") }
+        // 清华大学源（次选）
+        maven { url = uri("https://mirrors.tuna.tsinghua.edu.cn/nexus/content/repositories/maven-central/") }
+        // 阿里云（备用）
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
         google()
         mavenCentral()
     }
