@@ -40,6 +40,7 @@ abstract mixin class BaseFunction {
   void initBaseCommon(State state, BuildContext context) {
     _stateBaseFunction = state;
     _contextBaseFunction = context;
+
     if (BuildConfig.isDebug) {
       _appBarTitle = getClassName();
       _appBarRightTitle = "";
