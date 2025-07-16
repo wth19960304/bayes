@@ -15,7 +15,7 @@ import 'package:tencent_kit/tencent_kit.dart';
 ///登录
 // ignore: must_be_immutable
 class LoginPage extends BaseWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   BaseWidgetState<BaseWidget> getState() {
