@@ -29,3 +29,6 @@ flutter:
   uses-material-design: true
   assets:
     - images/
+
+tencent_kit:
+  app_id: "101887594"

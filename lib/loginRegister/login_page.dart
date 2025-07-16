@@ -40,80 +40,82 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
           width: ScreenUtil.screenWidth,
           fit: BoxFit.fill,
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(
-                left: ScreenUtil.L(30),
-                right: ScreenUtil.L(30),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.topCenter,
-                    // ignore: sort_child_properties_last
-                    child: Image.asset(
-                      "images/login_logo.png",
-                      height: getImageHeight(202, 255, ScreenUtil.L(100)),
-                      width: ScreenUtil.L(100),
-                      fit: BoxFit.fill,
+        SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(
+                  left: ScreenUtil.L(30),
+                  right: ScreenUtil.L(30),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.topCenter,
+                      // ignore: sort_child_properties_last
+                      child: Image.asset(
+                        "images/login_logo.png",
+                        height: getImageHeight(202, 255, ScreenUtil.L(100)),
+                        width: ScreenUtil.L(100),
+                        fit: BoxFit.fill,
+                      ),
+                      margin: EdgeInsets.only(top: ScreenUtil.L(35)),
                     ),
-                    margin: EdgeInsets.only(top: ScreenUtil.L(35)),
-                  ),
-                  Container(
-                    alignment: Alignment.topCenter,
-                    // ignore: sort_child_properties_last
-                    child: Text("欢迎来到贝叶斯数学", style: KFontConstant.grayText()),
-                    margin: EdgeInsets.only(top: ScreenUtil.L(10)),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: ScreenUtil.L(30)),
-                    child: TextField(
-                      style: KFontConstant.blackTextBig(),
-                      controller: userController,
-                      maxLength: 11,
-                      decoration: inputDecoration(
-                        label: "手机号码",
-                        errorString: "手机号码格式错误",
-                        error: phoneError,
+                    Container(
+                      alignment: Alignment.topCenter,
+                      // ignore: sort_child_properties_last
+                      child: Text("欢迎来到贝叶斯数学", style: KFontConstant.grayText()),
+                      margin: EdgeInsets.only(top: ScreenUtil.L(10)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: ScreenUtil.L(30)),
+                      child: TextField(
+                        style: KFontConstant.blackTextBig(),
+                        controller: userController,
+                        maxLength: 11,
+                        decoration: inputDecoration(
+                          label: "手机号码",
+                          errorString: "手机号码格式错误",
+                          error: phoneError,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: ScreenUtil.L(10)),
-                    child: TextField(
-                      obscureText: true,
-                      style: KFontConstant.blackTextBig(),
-                      controller: pwdController,
-                      decoration: inputDecoration(
-                        label: "密码",
-                        errorString: "",
-                        error: false,
+                    Container(
+                      margin: EdgeInsets.only(top: ScreenUtil.L(10)),
+                      child: TextField(
+                        obscureText: true,
+                        style: KFontConstant.blackTextBig(),
+                        controller: pwdController,
+                        decoration: inputDecoration(
+                          label: "密码",
+                          errorString: "",
+                          error: false,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: ScreenUtil.L(30),
-                      left: ScreenUtil.L(30),
-                      right: ScreenUtil.L(30),
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: ScreenUtil.L(30),
+                        left: ScreenUtil.L(30),
+                        right: ScreenUtil.L(30),
+                      ),
+                      child: raisedNextButton("登录"),
                     ),
-                    child: raisedNextButton("登录"),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: ScreenUtil.L(20),
-                      left: ScreenUtil.L(30),
-                      right: ScreenUtil.L(30),
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: ScreenUtil.L(20),
+                        left: ScreenUtil.L(30),
+                        right: ScreenUtil.L(30),
+                      ),
+                      child: raisedNextButton("注册", buttonTag: 1),
                     ),
-                    child: raisedNextButton("注册", buttonTag: 1),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            _wxLoginWidget(),
-          ],
+              _wxLoginWidget(),
+            ],
+          ),
         ),
       ],
     );
@@ -126,13 +128,20 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   bool isQQInstalled = true;
 
   _initFluwx() async {
-    await FluwxUtil.instance.registerApi(
-      appId: "wxa4a5f5d0d85630a2",
-      doOnAndroid: true,
-      doOnIOS: true,
-    );
-    //是否安装了微信
-    isWeChatInstalled = await FluwxUtil.instance.isWeChatInstalled;
+    print('11111111111111111111');
+    try {
+      await FluwxUtil.instance.registerApi(
+        appId: "wxa4a5f5d0d85630a2",
+        doOnAndroid: true,
+        doOnIOS: true,
+      );
+
+      //是否安装了微信
+      isWeChatInstalled = await FluwxUtil.instance.isWeChatInstalled;
+    } catch (e) {
+      print('2222222222222222222');
+      print(e);
+    }
   }
 
   _initFluQQ() async {
@@ -442,12 +451,14 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   void onCreate() {
     setAppBarVisible(false);
     setFloatingShow(false);
-    userController.text = SpUtils().getString(SpConstanst.USER_NAME)!;
-    pwdController.text = SpUtils().getString(SpConstanst.USER_PWD)!;
+
+    userController.text = SpUtils().getString(SpConstanst.USER_NAME) ?? "";
+    pwdController.text = SpUtils().getString(SpConstanst.USER_PWD) ?? "";
+
     SpUtils().setString(SpConstanst.USER_TOKEN, "");
     SpUtils().setString(SpConstanst.USER_ID, "");
     _initFluwx();
-    _initFluQQ();
+    // _initFluQQ();
     //监听获取code的回调
   }
 

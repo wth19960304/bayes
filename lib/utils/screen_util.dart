@@ -9,10 +9,10 @@ class ScreenUtil {
   ScreenUtil._internal();
 
   /// 设计稿的设备宽度
-  static final int _designWidth = 360;
+  static final int _designWidth = 400;
 
   /// 设计稿的设备高度
-  static final int _designHeight = 360;
+  static final int _designHeight = 400;
 
   /// 屏幕信息
   static MediaQueryData? _mediaQueryData;
