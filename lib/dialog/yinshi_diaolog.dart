@@ -1,7 +1,7 @@
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
-import 'package:flutter/material.dart';
 import 'package:bayes/utils/screen_util.dart';
+import 'package:flutter/material.dart';
 
 /// 隐私对话框
 class YinShiDialog extends StatefulWidget {
@@ -37,7 +37,7 @@ class _YinShiDialogState extends State<YinShiDialog> {
         child: Center(
           child: SizedBox(
             width: ScreenUtil.L(260),
-            height: ScreenUtil.L(260),
+            height: ScreenUtil.L(300),
             child: Material(
               elevation: 24.0,
               color: Theme.of(context).dialogTheme.backgroundColor,
