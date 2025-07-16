@@ -1,11 +1,12 @@
+// ignore: file_names
 import 'package:bayes/base/base_widget.dart';
 import 'package:bayes/constant/font.dart';
+import 'package:bayes/utils/screen_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class MeInfoPage extends BaseWidget {
-  MeInfoPage({super.key});
+  const MeInfoPage({super.key});
 
   @override
   BaseWidgetState<BaseWidget> getState() {
@@ -17,7 +18,7 @@ class _MeInfoPageState extends BaseWidgetState {
   @override
   Widget buildWidget(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(15)),
+      padding: EdgeInsets.all(ScreenUtil.setWidth(15)),
 
       child: Text(
         "承诺：<贝叶斯数学>包含高中数学全部三阶课程（基础篇+题型篇+冲刺篇）永久免费\n\n"
