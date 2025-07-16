@@ -21,6 +21,7 @@ import 'dart:io'; // 平台判断功能
 import 'package:bayes/constant/color.dart'; // 颜色常量定义
 import 'package:bayes/splash_page.dart';
 import 'package:bayes/utils/sp_utils.dart'; // 本地存储工具类
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart'; // Material组件库
 import 'package:flutter/services.dart'; // 系统UI控制
 
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
      * 设置透明状态栏实现沉浸式效果
      * 注意：必须在build方法外设置，避免被MaterialApp默认样式覆盖
      */
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       final systemUiOverlayStyle = SystemUiOverlayStyle(
         statusBarColor: Colors.transparent, // 透明状态栏
       );
