@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/constant/style.dart';
 import 'package:bayes/dialog/yinshi_diaolog.dart';
+import 'package:bayes/loginRegister/login_page.dart';
+import 'package:bayes/pages/tv_page.dart';
+import 'package:bayes/userInfo/MeInfoPage.dart';
 import 'package:bayes/utils/screen_util.dart';
 import 'package:bayes/utils/sp_constant.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:async';
-import 'package:flutter/services.dart';
 import 'package:bayes/utils/sp_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -39,7 +43,6 @@ class _SplashScreenState extends State<SplashPage> {
           return YinShiDialog();
         },
       ).then((value) {
-        print(value);
         if (value != null && value == "right") {
           // 用户同意隐私政策，设置标记并继续导航
           SpUtils().setString("noFirstApp", "true");
@@ -53,22 +56,19 @@ class _SplashScreenState extends State<SplashPage> {
     }
     // 非第一次打开，检查用户是否已登录
     Navigator.of(context).pop();
-    if (SpUtils().getString(SpConstanst.USER_TOKEN) == "") {
+    print(SpUtils().getString(SpConstanst.USER_TOKEN));
+    if (SpUtils().getString(SpConstanst.USER_TOKEN)?.isEmpty ?? true) {
       // 未登录，跳转到登录页面
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) =>
-              // LoginPage()
-              Text("LoginPage"),
-        ),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (context) => LoginPage()));
     } else {
       // 已登录，跳转到主页面
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) =>
               // MainPage()
-              Text("LoginPage"),
+              Text("wth"),
         ),
       );
     }
@@ -149,9 +149,7 @@ class _SplashScreenState extends State<SplashPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    // MeInfoPage()
-                                    Text("MeInfoPage"),
+                                builder: (context) => MeInfoPage(),
                               ),
                             );
                           },
@@ -165,9 +163,7 @@ class _SplashScreenState extends State<SplashPage> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    // TextPage()
-                                    Text("TextPage"),
+                                builder: (context) => TextPage(),
                               ),
                             );
                           },
