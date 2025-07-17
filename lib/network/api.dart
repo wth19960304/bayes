@@ -174,8 +174,8 @@ class HttpManager {
     //服务器地址
     _dio.options.baseUrl = NWApi.baseApi;
 
-    _dio.options.connectTimeout = CONNECR_TIME_OUT as Duration?; //5s
-    _dio.options.receiveTimeout = RECIVE_TIME_OUT as Duration?;
+    _dio.options.connectTimeout = Duration(milliseconds: CONNECR_TIME_OUT); //5s
+    _dio.options.receiveTimeout = Duration(milliseconds: RECIVE_TIME_OUT);
     _dio.options.contentType = CONTENT_TYPE_FORM;
 
     //代理设置
