@@ -10,6 +10,9 @@ pluginManagement {
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
+        maven { url = uri("https://maven.aliyun.com/repository/google") }
+        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
         google()
         mavenCentral()
         gradlePluginPortal()
@@ -19,14 +22,6 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
-        // 腾讯云镜像（新增）
-        maven { url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/") }
-        // 华为云（首推）
-        maven { url = uri("https://mirrors.huaweicloud.com/repository/maven/") }
-        // 清华大学源（次选）
-        maven { url = uri("https://mirrors.tuna.tsinghua.edu.cn/nexus/content/repositories/maven-central/") }
-        // 阿里云（备用）
-        maven { url = uri("https://maven.aliyun.com/repository/public") }
         // 其他镜像或官方仓库
         google()
         mavenCentral()
@@ -35,8 +30,8 @@ dependencyResolutionManagement {
 
 plugins {
     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
-    id("com.android.application") version "8.10.1" apply false
-    id("org.jetbrains.kotlin.android") version "2.1.0" apply false
+    id("com.android.application") version "8.10.0" apply false
+    id("org.jetbrains.kotlin.android") version "2.0.20" apply false
 }
 
 include(":app")
