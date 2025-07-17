@@ -3,6 +3,7 @@ import 'package:bayes/bean/login_model.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
+import 'package:bayes/pages/tv_page.dart';
 import 'package:bayes/userInfo/MeInfoPage.dart';
 import 'package:bayes/utils/fluwx_util.dart';
 import 'package:bayes/utils/screen_util.dart';
@@ -128,7 +129,6 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   bool isQQInstalled = true;
 
   _initFluwx() async {
-    print('11111111111111111111');
     try {
       await FluwxUtil.instance.registerApi(
         appId: "wxa4a5f5d0d85630a2",
@@ -265,13 +265,9 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            // TextPage()
-                            Text("wth"),
-                      ),
-                    );
+                    Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute(builder: (context) => TextPage()));
                   },
                   child: Text("《隐私政策》", style: KFontConstant.themeText()),
                 ),
@@ -393,6 +389,7 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
 
   @override
   btnNext(int buttonTag) {
+    // 0为登陆
     if (buttonTag == 0) {
       if (!select) {
         showToast("请阅读并同意用户与隐私协议");
@@ -436,9 +433,9 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       "phoneNum": phoneNum,
       "password": password,
     };
-
     RequestMap.loginIn(ShowLoadingIntercept(this), formData).listen(
       (da) {
+        print(da);
         _loginSuncess(da);
       },
       onError: (err) {
