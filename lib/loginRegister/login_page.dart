@@ -309,26 +309,33 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     var formData = {"code": code, "type": "APP"};
     RequestMap.weChatLogin(ShowLoadingIntercept(this), formData).listen(
       (da) {
+        print("object");
+        print(da);
         if (da.data?.openId != null && da.data?.openId != "") {
           //前往绑定手机号码界面
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => RegisterPhonePage(
-          //       openId: "${da.data.openId}",
-          //       nickname: da.data.nickname,
-          //       headImg: da.data.headImg,
-          //     ),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RegisterPhonePage(
+                openId: "${da.data?.openId}",
+                nickname: da.data?.nickname,
+                headImg: da.data?.headImg,
+              ),
+            ),
+          );
           return;
         }
         _loginSuncess(da);
       },
       onError: (err) {
-        print(2222222222222222222);
-        print(err.message);
-        showToast("${err.message}");
+        print(err);
+        print(3333333);
+
+        showToast(err.code.toString());
+        print(4444444444);
+
+        showToast(err.message.toString());
+        print(5555555555555);
       },
     );
   }
@@ -357,7 +364,8 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
         _loginSuncess(da);
       },
       onError: (err) {
-        showToast("${err.message}");
+        print("33333333333333333");
+        showToast("$err");
       },
     );
   }

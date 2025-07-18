@@ -32,7 +32,7 @@ class Data {
   Data({this.user, this.token, this.openId, this.nickname, this.headImg});
 
   Data.fromJson(Map<String, dynamic> json) {
-    user = (json['user'] != null ? User.fromJson(json['user']) : null)!;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     token = json['token'];
     openId = json['openid'];
     nickname = json['nickname'];

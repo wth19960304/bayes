@@ -106,9 +106,11 @@ class HttpManager {
     } else {
       future = _dio.post(url, data: queryParameters, cancelToken: cancelToken);
     }
+
     future
         .then((da) {
           Response data = da;
+
           if (data.headers.value("code") == "400") {
             //token过期 提示并进入登录界面
             //        showToast("登录过期，请重新登录");
@@ -127,9 +129,8 @@ class HttpManager {
             );
           } else {
             //解析参照 https://www.jianshu.com/p/e909f3f936d6
-            publishSubject.add(
-              EntityFactory.generateOBJ<T>(json.decode(data.toString())),
-            );
+            final dataSelf = json.decode(data.toString());
+            publishSubject.add(EntityFactory.generateOBJ<T>(dataSelf));
             publishSubject.close();
 
             cancelLoading(baseIntercept!);
