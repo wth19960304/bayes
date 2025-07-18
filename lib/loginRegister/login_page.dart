@@ -1,6 +1,7 @@
 import 'package:bayes/base/base_widget.dart';
 import 'package:bayes/bean/login_model.dart';
 import 'package:bayes/constant/font.dart';
+import 'package:bayes/loginRegister/register_phone.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
 import 'package:bayes/pages/tv_page.dart';
@@ -400,11 +401,7 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       //前往注册界面
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) =>
-              // RegisterPhonePage()
-              Text("wth"),
-        ),
+        MaterialPageRoute(builder: (context) => RegisterPhonePage()),
       );
     }
   }
