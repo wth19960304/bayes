@@ -10,8 +10,7 @@ class CellInput extends StatefulWidget {
   int cellCount = 4;
   InputType inputType = InputType.number;
   InputCompleteCallback? inputCompleteCallback;
-  bool? autofocus = true;
-  BorderRadiusGeometry? borderRadius;
+  bool autofocus = true;
   Color solidColor;
   Color strokeColor;
   Color textColor;
@@ -23,8 +22,7 @@ class CellInput extends StatefulWidget {
     this.cellCount = 4,
     this.inputType = InputType.number,
     this.autofocus = true,
-    this.inputCompleteCallback,
-    this.borderRadius,
+    this.inputCompleteCallback = _defaultCallback,
     this.solidColor = KColorConstant.white,
     this.strokeColor = Colors.transparent,
     this.textColor = Colors.black,
@@ -32,20 +30,22 @@ class CellInput extends StatefulWidget {
     this.controller,
   }) : super(key: key);
 
+  // 默认的空回调函数
+  static void _defaultCallback(String content) {}
+
   @override
   State<StatefulWidget> createState() {
     // ignore: no_logic_in_create_state
     return _CellInputState(
       cellCount,
       inputType,
-      autofocus!,
-      inputCompleteCallback!,
-      borderRadius! as Color,
+      autofocus,
+      inputCompleteCallback ?? _defaultCallback,
       solidColor,
       strokeColor,
-      textColor as double,
-      fontSize as TextEditingController,
-      controller!,
+      textColor,
+      fontSize,
+      controller ?? TextEditingController(),
     );
   }
 }
@@ -62,6 +62,7 @@ class _CellInputState extends State<CellInput> {
   final Color _strokeColor;
   final Color _textColor;
   final double _fontSize;
+  final TextEditingController _controller;
 
   _CellInputState(
     this._cellCount,
@@ -73,10 +74,7 @@ class _CellInputState extends State<CellInput> {
     this._textColor,
     this._fontSize,
     this._controller,
-    TextEditingController textEditingController,
   );
-
-  final TextEditingController _controller;
 
   @override
   Widget build(BuildContext context) {
