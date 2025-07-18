@@ -122,10 +122,9 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     );
   }
 
+  //是否安装了微信
   bool wxChatInstalled = true;
 
-  //是否安装了微信
-  bool isWeChatInstalled = true;
   bool isQQInstalled = true;
 
   _initFluwx() async {
@@ -137,16 +136,31 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       );
 
       //是否安装了微信
-      isWeChatInstalled = await FluwxUtil.instance.isWeChatInstalled;
+      wxChatInstalled = await FluwxUtil.instance.isWeChatInstalled;
+      setState(() {
+        wxChatInstalled = wxChatInstalled;
+      });
     } catch (e) {
-      print('2222222222222222222');
-      print(e);
+      setState(() {
+        wxChatInstalled = false;
+      });
     }
   }
 
   _initFluQQ() async {
-    TencentKitPlatform.instance.registerApp(appId: "101887594");
-    isQQInstalled = await TencentKitPlatform.instance.isQQInstalled();
+    try {
+      await TencentKitPlatform.instance.registerApp(appId: "101887594");
+      isQQInstalled = await TencentKitPlatform.instance.isQQInstalled();
+      print("QQ初始化完毕---------------");
+      print(isQQInstalled);
+      setState(() {
+        isQQInstalled = isQQInstalled;
+      });
+    } catch (e) {
+      setState(() {
+        isQQInstalled = false;
+      });
+    }
   }
 
   _fluQQLogin() async {
@@ -299,13 +313,11 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  // RegisterPhonePage(
-                  //   openId: "${da.data.openId}",
-                  //   nickname: da.data.nickname,
-                  //   headImg: da.data.headImg,
-                  // )
-                  Text("wth"),
+              builder: (context) => RegisterPhonePage(
+                openId: "${da.data.openId}",
+                nickname: da.data.nickname,
+                headImg: da.data.headImg,
+              ),
             ),
           );
           return;
@@ -313,6 +325,8 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
         _loginSuncess(da);
       },
       onError: (err) {
+        print(2222222222222222222);
+        print(err.message);
         showToast("${err.message}");
       },
     );
@@ -455,8 +469,27 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     SpUtils().setString(SpConstanst.USER_TOKEN, "");
     SpUtils().setString(SpConstanst.USER_ID, "");
     _initFluwx();
-    // _initFluQQ();
+    _initFluQQ();
     //监听获取code的回调
+    FluwxUtil.instance.addSubscriber((res) {
+      print("123213");
+
+      if (res is WeChatAuthResponse) {
+        setState(() {
+          if (res.errCode == 0 && res.code != null) {
+            _loginToWx(code: res.code!);
+            //  getAccToken(res.code).then((data) {
+            //    print(data.toString());
+            //    var datas = json.decode(data.toString());
+            //    String access_token = datas["access_token"];
+            //    String openId = datas["openid"];
+            //    SpUtils().setString(SpConstanst.WX_ACCESS_TOKEN, access_token);
+            //    showToast("$access_token");
+            //  });
+          }
+        });
+      }
+    });
   }
 
   @override

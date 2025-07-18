@@ -1,5 +1,7 @@
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
+import 'package:bayes/pages/tv_page.dart';
+import 'package:bayes/userInfo/MeInfoPage.dart';
 import 'package:bayes/utils/screen_util.dart';
 import 'package:flutter/material.dart';
 
@@ -143,8 +145,7 @@ class _YinShiDialogState extends State<YinShiDialog> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    // title == '《用户服务协议》' ? MeInfoPage() : TextPage(),
-                    Text("22"),
+                    title == '《用户服务协议》' ? MeInfoPage() : TextPage(),
               ),
             );
           },
