@@ -153,7 +153,6 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       await TencentKitPlatform.instance.registerApp(appId: "101887594");
       isQQInstalled = await TencentKitPlatform.instance.isQQInstalled();
       print("QQ初始化完毕---------------");
-      print(isQQInstalled);
       setState(() {
         isQQInstalled = isQQInstalled;
       });
@@ -165,6 +164,7 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   }
 
   _fluQQLogin() async {
+    await TencentKitPlatform.instance.setIsPermissionGranted(granted: true);
     await TencentKitPlatform.instance.login(
       scope: <String>[TencentScope.kGetSimpleUserInfo],
     );
@@ -311,16 +311,16 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       (da) {
         if (da.data?.openId != null && da.data?.openId != "") {
           //前往绑定手机号码界面
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RegisterPhonePage(
-                openId: "${da.data.openId}",
-                nickname: da.data.nickname,
-                headImg: da.data.headImg,
-              ),
-            ),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => RegisterPhonePage(
+          //       openId: "${da.data.openId}",
+          //       nickname: da.data.nickname,
+          //       headImg: da.data.headImg,
+          //     ),
+          //   ),
+          // );
           return;
         }
         _loginSuncess(da);
@@ -344,14 +344,12 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  // RegisterPhonePage(
-                  //   openId: "${da.data.openId}",
-                  //   nickname: da.data.nickname,
-                  //   headImg: da.data.headImg,
-                  //   isQQ: true,
-                  // )
-                  Text("wth"),
+              builder: (context) => RegisterPhonePage(
+                openId: "${da.data?.openId}",
+                nickname: da.data?.nickname,
+                headImg: da.data?.headImg,
+                isQQ: true,
+              ),
             ),
           );
           return;
@@ -469,8 +467,6 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
     _initFluQQ();
     //监听获取code的回调
     FluwxUtil.instance.addSubscriber((res) {
-      print("123213");
-
       if (res is WeChatAuthResponse) {
         setState(() {
           if (res.errCode == 0 && res.code != null) {
@@ -487,6 +483,19 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
         });
       }
     });
+    TencentKitPlatform.instance.respStream().listen(_listenLogin);
+  }
+
+  void _listenLogin(TencentResp resp) {
+    print(resp);
+    if (resp is TencentLoginResp) {
+      if (resp.ret == 0) {
+        _qqLoginHttp(openid: resp.openid!, code: resp.accessToken!);
+      }
+    } else if (resp is TencentShareMsgResp) {
+      final String content = 'share: ${resp.ret} - ${resp.msg}';
+      print(content);
+    }
   }
 
   @override
