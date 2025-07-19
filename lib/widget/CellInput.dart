@@ -3,13 +3,13 @@ import 'package:bayes/utils/screen_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-typedef InputCompleteCallback = Function(String content);
+typedef InputCompleteCallback = Function();
 
 // ignore: must_be_immutable
 class CellInput extends StatefulWidget {
   int cellCount = 4;
   InputType inputType = InputType.number;
-  InputCompleteCallback? inputCompleteCallback;
+  InputCompleteCallback inputCompleteCallback;
   bool autofocus = true;
   Color solidColor;
   Color strokeColor;
@@ -18,20 +18,17 @@ class CellInput extends StatefulWidget {
   TextEditingController? controller;
 
   CellInput({
-    required Key key,
+    super.key,
     this.cellCount = 4,
     this.inputType = InputType.number,
     this.autofocus = true,
-    this.inputCompleteCallback = _defaultCallback,
+    required this.inputCompleteCallback,
     this.solidColor = KColorConstant.white,
     this.strokeColor = Colors.transparent,
     this.textColor = Colors.black,
     this.fontSize = 27,
     this.controller,
-  }) : super(key: key);
-
-  // 默认的空回调函数
-  static void _defaultCallback(String content) {}
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +37,7 @@ class CellInput extends StatefulWidget {
       cellCount,
       inputType,
       autofocus,
-      inputCompleteCallback ?? _defaultCallback,
+      inputCompleteCallback,
       solidColor,
       strokeColor,
       textColor,
@@ -102,7 +99,7 @@ class _CellInputState extends State<CellInput> {
                 setState(() {
                   inputStr = v;
                   if (v.length == _cellCount) {
-                    _inputCompleteCallback(v);
+                    _inputCompleteCallback();
                   }
                 });
               },
