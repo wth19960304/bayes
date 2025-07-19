@@ -92,7 +92,10 @@ class _RegisterCodePageState extends BaseWidgetState<RegisterCodePage> {
             ),
             Container(
               margin: EdgeInsets.all(ScreenUtil.L(40)),
-              child: CellInput(controller: userController, key: UniqueKey()),
+              child: CellInput(
+                controller: userController,
+                inputCompleteCallback: () => {_validCodeNext()},
+              ),
             ),
             Container(
               margin: EdgeInsets.only(
@@ -159,6 +162,10 @@ class _RegisterCodePageState extends BaseWidgetState<RegisterCodePage> {
   @override
   void btnNext(int buttonTag) {
     super.btnNext(buttonTag);
+    _validCodeNext();
+  }
+
+  _validCodeNext() {
     if (userController.text.length < 4) {
       showToast("验证码格式不正确");
       return;
@@ -194,7 +201,6 @@ class _RegisterCodePageState extends BaseWidgetState<RegisterCodePage> {
     if (_countdownTimer != null && _countdownTimer!.isActive) {
       return;
     }
-    print("1111111111111111111111");
     setState(() {
       // Timer的第一秒倒计时是有一点延迟的，为了立刻显示效果可以添加下一行。
       _codeCountdownStr = '${_countdownNum--}S重新获取';
