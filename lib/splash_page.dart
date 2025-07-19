@@ -4,6 +4,7 @@ import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/constant/style.dart';
 import 'package:bayes/dialog/yinshi_diaolog.dart';
+import 'package:bayes/home/MainPage.dart';
 import 'package:bayes/loginRegister/login_page.dart';
 import 'package:bayes/pages/tv_page.dart';
 import 'package:bayes/userInfo/MeInfoPage.dart';
@@ -56,7 +57,6 @@ class _SplashScreenState extends State<SplashPage> {
     }
     // 非第一次打开，检查用户是否已登录
     Navigator.of(context).pop();
-    print(SpUtils().getString(SpConstanst.USER_TOKEN));
     if (SpUtils().getString(SpConstanst.USER_TOKEN)?.isEmpty ?? true) {
       // 未登录，跳转到登录页面
       Navigator.of(
@@ -64,13 +64,9 @@ class _SplashScreenState extends State<SplashPage> {
       ).push(MaterialPageRoute(builder: (context) => LoginPage()));
     } else {
       // 已登录，跳转到主页面
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) =>
-              // MainPage()
-              Text("wth"),
-        ),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (context) => MainPage()));
     }
   }
 
