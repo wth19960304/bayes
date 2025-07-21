@@ -24,12 +24,12 @@ class UserInfoData {
   final String? password;
   final String? nickname;
   final List<HeadImg>? headImg;
-  final String? sex;
-  final String? grade;
-  final String? userType;
-  final String? division;
-  final String? mathScores;
-  final String? position;
+  late final String? sex;
+  late final String? grade;
+  late final String? userType;
+  late final String? division;
+  late final String? mathScores;
+  late final String? position;
   final String? state;
   final String? banReason;
   final String? banStartTime;
@@ -38,9 +38,9 @@ class UserInfoData {
   final String? studyNum;
   final String? testNum;
   final String? cacheNum;
-  final String? provincialId;
-  final String? cityId;
-  final String? areaId;
+  late final String? provincialId;
+  late final String? cityId;
+  late final String? areaId;
 
   UserInfoData({
     this.id,
