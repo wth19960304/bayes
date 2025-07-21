@@ -35,6 +35,8 @@ class Data {
     );
   }
 
+  String? get gradeName => null;
+
   Map<String, dynamic> toJson() {
     return {
       'total': total,
