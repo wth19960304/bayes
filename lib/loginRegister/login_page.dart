@@ -1,10 +1,12 @@
 import 'package:bayes/base/base_widget.dart';
 import 'package:bayes/bean/login_model.dart';
 import 'package:bayes/constant/font.dart';
+import 'package:bayes/home/MainPage.dart';
 import 'package:bayes/loginRegister/register_phone.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
 import 'package:bayes/pages/tv_page.dart';
+import 'package:bayes/userInfo/FirstUserInfoPage.dart';
 import 'package:bayes/userInfo/MeInfoPage.dart';
 import 'package:bayes/utils/fluwx_util.dart';
 import 'package:bayes/utils/screen_util.dart';
@@ -380,22 +382,14 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
       //前往完善资料界面
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) =>
-              // FirstUserInfoPage(login: true)
-              Text("wth"),
-        ),
+        MaterialPageRoute(builder: (context) => FirstUserInfoPage(login: true)),
       );
       return;
     }
     Navigator.of(context).pop();
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) =>
-            // MainPage()
-            Text("wth"),
-      ),
+      MaterialPageRoute(builder: (context) => MainPage()),
     );
   }
 
