@@ -10,6 +10,7 @@ import 'package:bayes/loginRegister/login_page.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
 import 'package:bayes/utils/screen_util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -130,6 +131,9 @@ abstract mixin class BaseFunction {
   }
 
   void _checkPersmission() async {
+    if (kIsWeb) {
+      return;
+    }
     bool hasPermission = await Permission.storage.request().isGranted;
     if (!hasPermission) {
       showToast("您拒绝了我们获取储存权限，请前往[设置-应用管理-权限获取]打开权限再进行吐槽");
