@@ -1,26 +1,15 @@
+import 'package:bayes/base/base_widget.dart';
 import 'package:dio/dio.dart';
-import 'package:erp_music/base/base_widget.dart';
-import 'package:erp_music/base/common_function.dart';
-import 'package:erp_music/bean/StudyHomeBean.dart';
-import 'package:erp_music/bean/TestHomeBean.dart';
-import 'package:erp_music/constant/color.dart';
-import 'package:erp_music/constant/font.dart';
-import 'package:erp_music/constant/style.dart';
-import 'package:erp_music/network/intercept/showloading_intercept.dart';
-import 'package:erp_music/network/requestUtil.dart';
-import 'package:erp_music/ui/Home/study/KechengItem.dart';
-import 'package:erp_music/ui/Home/study/ShitiItem.dart';
-import 'package:erp_music/ui/shiti/XuanzhetiWidget.dart';
-import 'package:erp_music/utils/screen_util.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 ///搜索结果以及分类选择界面
 class ShitiSearchPage extends BaseWidget {
-  String text; //搜索内容
-  String id; //分类id
-  String typeName;
+  String? text; //搜索内容
+  String? id; //分类id
+  String? typeName;
 
-  ShitiSearchPage({this.text, this.id, this.typeName});
+  ShitiSearchPage({super.key, this.text, this.id, this.typeName});
 
   @override
   BaseWidgetState<BaseWidget> getState() {
@@ -29,13 +18,16 @@ class ShitiSearchPage extends BaseWidget {
 }
 
 class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
-  TextEditingController editingController;
+  late TextEditingController editingController;
 
-  double deviceWidth;
+  late double deviceWidth;
 
-  GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
-  GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
-  GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
+  final GlobalKey<EasyRefreshState> _easyRefreshKey =
+      GlobalKey<EasyRefreshState>();
+  final GlobalKey<RefreshHeaderState> _headerKey =
+      GlobalKey<RefreshHeaderState>();
+  final GlobalKey<RefreshFooterState> _footerKey =
+      GlobalKey<RefreshFooterState>();
 
   LoadingWidgetStatue pageStatue = LoadingWidgetStatue.LOADING;
 
@@ -89,7 +81,7 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
             ),
             child: _listWidget(),
           ),
-        )
+        ),
       ],
     );
   }
@@ -112,8 +104,12 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
             child: Container(
               height: ScreenUtil().L(46),
               width: ScreenUtil().L(46),
-              padding:
-                  EdgeInsets.only(top: ScreenUtil().L(15), bottom: ScreenUtil().L(15), right: ScreenUtil().L(15), left: ScreenUtil().L(15)),
+              padding: EdgeInsets.only(
+                top: ScreenUtil().L(15),
+                bottom: ScreenUtil().L(15),
+                right: ScreenUtil().L(15),
+                left: ScreenUtil().L(15),
+              ),
               child: Image.asset("images/left_go.png"),
             ),
           ),
@@ -125,7 +121,7 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: ScreenUtil().L(15),
                   width: ScreenUtil().L(20),
                   child: Image.asset("images/search_icon.png"),
@@ -134,13 +130,13 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
                   child: Padding(
                     padding: EdgeInsets.only(left: ScreenUtil().L(5)),
                     child: TextField(
-//                        controller: controller,
+                      //                        controller: controller,
                       style: KFontConstant.defaultText(),
                       decoration: null,
                       controller: editingController,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -154,10 +150,7 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
               height: ScreenUtil().L(28),
               width: ScreenUtil().L(50),
               child: Center(
-                child: Text(
-                  "搜索",
-                  style: KFontConstant.whiteText(),
-                ),
+                child: Text("搜索", style: KFontConstant.whiteText()),
               ),
             ),
           ),
@@ -200,20 +193,28 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
   ///历史搜索列表
   _listWidget() {
     return ListView.builder(
-        padding: EdgeInsets.only(top: ScreenUtil().L(20), bottom: ScreenUtil().L(10), left: ScreenUtil().L(10), right: ScreenUtil().L(10)),
-        itemCount: data.length,
-        itemBuilder: (BuildContext context, int index) {
-          //Widget Function(BuildContext context, int index)
-          return InkWell(
-            onTap: () {
-              Navigator.push(context, new MaterialPageRoute(builder: (context) => new XuanzhetiWidget("${data[index].id}")))
-                  .then((value) {});
-            },
-            child: ShitiItem(
-              data: data[index],
-            ),
-          );
-        });
+      padding: EdgeInsets.only(
+        top: ScreenUtil().L(20),
+        bottom: ScreenUtil().L(10),
+        left: ScreenUtil().L(10),
+        right: ScreenUtil().L(10),
+      ),
+      itemCount: data.length,
+      itemBuilder: (BuildContext context, int index) {
+        //Widget Function(BuildContext context, int index)
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => XuanzhetiWidget("${data[index].id}"),
+              ),
+            ).then((value) {});
+          },
+          child: ShitiItem(data: data[index]),
+        );
+      },
+    );
   }
 
   _getGoods({bool isInit = true}) {
@@ -222,40 +223,48 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
       "pageSize": "$pageSize",
       "subject": "${widget.typeName}", //科目
       "courseLabel": "", //标签
-      "testTopic": "${editingController != null ? editingController.text : ""}", //搜索内容
+      "testTopic": editingController != null
+          ? editingController.text
+          : "", //搜索内容
     };
-    RequestMap.getListAppListManage(ShowLoadingIntercept(this, isInit: isInit), formData).listen((data) {
-      if (_easyRefreshKey.currentState != null) {
-        _easyRefreshKey.currentState.callRefreshFinish();
-        _easyRefreshKey.currentState.callLoadMoreFinish();
-      }
-      if (data.data.total == 0) {
-        setState(() {
-          pageStatue = LoadingWidgetStatue.DATAEMPTY;
-        });
-        return;
-      }
-      setState(() {
-        if (pageNum == 1) {
-          this.data.clear();
+    RequestMap.getListAppListManage(
+      ShowLoadingIntercept(this, isInit: isInit),
+      formData,
+    ).listen(
+      (data) {
+        if (_easyRefreshKey.currentState != null) {
+          _easyRefreshKey.currentState.callRefreshFinish();
+          _easyRefreshKey.currentState.callLoadMoreFinish();
         }
-        this.data.addAll(data.data.content);
-        pageStatue = LoadingWidgetStatue.NONE;
-      });
-    }, onError: (err) {
-      if (_easyRefreshKey.currentState != null) {
-        _easyRefreshKey.currentState.callRefreshFinish();
-        _easyRefreshKey.currentState.callLoadMoreFinish();
-      }
-      setState(() {
-        pageStatue = LoadingWidgetStatue.ERROR;
-      });
-    });
+        if (data.data.total == 0) {
+          setState(() {
+            pageStatue = LoadingWidgetStatue.DATAEMPTY;
+          });
+          return;
+        }
+        setState(() {
+          if (pageNum == 1) {
+            this.data.clear();
+          }
+          this.data.addAll(data.data.content);
+          pageStatue = LoadingWidgetStatue.NONE;
+        });
+      },
+      onError: (err) {
+        if (_easyRefreshKey.currentState != null) {
+          _easyRefreshKey.currentState.callRefreshFinish();
+          _easyRefreshKey.currentState.callLoadMoreFinish();
+        }
+        setState(() {
+          pageStatue = LoadingWidgetStatue.ERROR;
+        });
+      },
+    );
   }
 
   @override
   void dispose() {
-    if (editingController != null) editingController.dispose();
+    editingController.dispose();
     super.dispose();
   }
 }
