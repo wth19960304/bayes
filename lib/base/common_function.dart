@@ -483,7 +483,7 @@ abstract mixin class BaseFunction {
   }
 
   ///根据不同的状态返回不同的widget，全部居中显示
-  Widget? baseStatueWidget(LoadingWidgetStatue pageStatue) {
+  Widget baseStatueWidget(LoadingWidgetStatue pageStatue) {
     if (pageStatue == LoadingWidgetStatue.LOADING) {
       return Center(child: getLoadingWidget());
     }
@@ -493,7 +493,7 @@ abstract mixin class BaseFunction {
     if (pageStatue == LoadingWidgetStatue.DATAEMPTY) {
       return Center(child: getEmptyWidget());
     }
-    return null;
+    return Center(child: getEmptyWidget());
   }
 
   ///判断错误是否是取消请求
