@@ -1,21 +1,22 @@
-import 'package:erp_music/base/base_widget.dart';
-import 'package:erp_music/base/common_function.dart';
-import 'package:erp_music/constant/color.dart';
-import 'package:erp_music/constant/font.dart';
-import 'package:erp_music/constant/style.dart';
-import 'package:erp_music/ui/Home/KechengSearchPage.dart';
-import 'package:erp_music/utils/screen_util.dart';
-import 'package:erp_music/utils/sp_utils/sp_constant.dart';
-import 'package:erp_music/utils/sp_utils/sp_utils.dart';
+import 'package:bayes/base/base_widget.dart';
+import 'package:bayes/base/common_function.dart';
+import 'package:bayes/constant/color.dart';
+import 'package:bayes/constant/font.dart';
+import 'package:bayes/constant/style.dart';
+import 'package:bayes/pages/KechengVideoSearchPage.dart';
+import 'package:bayes/utils/screen_util.dart';
+import 'package:bayes/utils/sp_constant.dart';
+import 'package:bayes/utils/sp_utils.dart';
+import 'package:flutter/material.dart';
 
-import 'KechengVideoSearchPage.dart';
 import 'ShitiSearchPage.dart';
 
 ///搜索界面
+// ignore: must_be_immutable
 class SearchPage extends BaseWidget {
   String name;
 
-  SearchPage({this.name});
+  SearchPage({super.key, required this.name});
 
   @override
   BaseWidgetState<BaseWidget> getState() {
@@ -27,7 +28,7 @@ class SearchPage extends BaseWidget {
 class _SearchPageState extends BaseWidgetState<SearchPage> {
   TextEditingController editingController = TextEditingController(text: '');
 
-  List<String> searchList;
+  late List<String> searchList;
 
   LoadingWidgetStatue statue = LoadingWidgetStatue.LOADING;
 
@@ -36,19 +37,14 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
     if (statue != LoadingWidgetStatue.NONE) {
       return baseStatueWidget(statue);
     }
-    return Column(
-      children: <Widget>[
-        _titleWidget(),
-        _listWidget(),
-      ],
-    );
+    return Column(children: <Widget>[_titleWidget(), _listWidget()]);
   }
 
   @override
   Widget getAppBar() {
     return Container(
-      padding: EdgeInsets.only(right: ScreenUtil().L(15)),
-      height: ScreenUtil().L(50),
+      padding: EdgeInsets.only(right: ScreenUtil.L(15)),
+      height: ScreenUtil.L(50),
       width: double.infinity,
       color: KColorConstant.appBgColor,
       child: Row(
@@ -57,37 +53,41 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
           InkWell(
             onTap: clickAppBarBack,
             child: Container(
-              height: ScreenUtil().L(46),
-              width: ScreenUtil().L(46),
-              padding:
-                  EdgeInsets.only(top: ScreenUtil().L(15), bottom: ScreenUtil().L(15), right: ScreenUtil().L(15), left: ScreenUtil().L(15)),
+              height: ScreenUtil.L(46),
+              width: ScreenUtil.L(46),
+              padding: EdgeInsets.only(
+                top: ScreenUtil.L(15),
+                bottom: ScreenUtil.L(15),
+                right: ScreenUtil.L(15),
+                left: ScreenUtil.L(15),
+              ),
               child: Image.asset("images/left_go.png"),
             ),
           ),
           Container(
-            height: ScreenUtil().L(30),
+            height: ScreenUtil.L(30),
             padding: EdgeInsets.only(left: 10),
-            width: ScreenUtil().L(230),
+            width: ScreenUtil.L(230),
             decoration: KBoxStyle.btnYuanBgcolor(),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  height: ScreenUtil().L(15),
-                  width: ScreenUtil().L(20),
+                SizedBox(
+                  height: ScreenUtil.L(15),
+                  width: ScreenUtil.L(20),
                   child: Image.asset("images/search_icon.png"),
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: ScreenUtil().L(5)),
+                    padding: EdgeInsets.only(left: ScreenUtil.L(5)),
                     child: TextField(
-//                        controller: controller,
+                      //                        controller: controller,
                       style: KFontConstant.defaultText(),
                       decoration: null,
                       controller: editingController,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -96,15 +96,12 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
               _goSearch();
             },
             child: Container(
-              margin: EdgeInsets.only(left: ScreenUtil().L(10)),
-              decoration: KBoxStyle.select_true(),
-              height: ScreenUtil().L(28),
-              width: ScreenUtil().L(50),
+              margin: EdgeInsets.only(left: ScreenUtil.L(10)),
+              decoration: KBoxStyle.selectTrue(),
+              height: ScreenUtil.L(28),
+              width: ScreenUtil.L(50),
               child: Center(
-                child: Text(
-                  "搜索",
-                  style: KFontConstant.whiteText(),
-                ),
+                child: Text("搜索", style: KFontConstant.whiteText()),
               ),
             ),
           ),
@@ -115,7 +112,7 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
 
   ///搜索
   _goSearch() {
-    if (editingController.text.length < 1) {
+    if (editingController.text.isEmpty) {
       showToast("搜索内容不能为空");
       return;
     }
@@ -134,9 +131,18 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
       SpUtils().setString(SpConstanst.SEARCH_LIST, searchListString);
     });
     if (widget.name == "课程搜索") {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => KeChengVideoSearchPage(text: editingController.text)));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) =>
+              KeChengVideoSearchPage(text: editingController.text),
+        ),
+      );
     } else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ShitiSearchPage(text: editingController.text)));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ShitiSearchPage(text: editingController.text),
+        ),
+      );
     }
   }
 
@@ -144,7 +150,7 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
   void onCreate() {
     searchList = SpUtils().getString(SpConstanst.SEARCH_LIST).split("&&&");
     searchList.remove("");
-    if (searchList == null || searchList.length < 1) {
+    if (searchList.isEmpty) {
       statue = LoadingWidgetStatue.DATAEMPTY;
     } else {
       statue = LoadingWidgetStatue.NONE;
@@ -169,22 +175,19 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
   ///历史记录+删除按钮
   _titleWidget() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().L(10)),
+      padding: EdgeInsets.all(ScreenUtil.L(10)),
       decoration: KBoxStyle.bottomLineStyle(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            "历史搜索",
-            style: KFontConstant.defaultText_bold(),
-          ),
+          Text("历史搜索", style: KFontConstant.defaultText_bold()),
           InkWell(
             onTap: () {
               _deleteAll();
             },
             child: Container(
-              height: ScreenUtil().L(25),
-              width: ScreenUtil().L(25),
+              height: ScreenUtil.L(25),
+              width: ScreenUtil.L(25),
               padding: EdgeInsets.all(7),
               child: Image.asset("images/shanchu.png"),
             ),
@@ -206,33 +209,38 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
   ///历史搜索列表
   _listWidget() {
     return Expanded(
-      child: ListView(
-        padding: EdgeInsets.only(top: 0),
-        children: _listItems(),
-      ),
+      child: ListView(padding: EdgeInsets.only(top: 0), children: _listItems()),
     );
   }
 
   _listItems() {
     List<Widget> widgets = List();
     for (int i = 0; i < searchList.length; i++) {
-      widgets.add(InkWell(
-        onTap: () {
-          if (widget.name == "课程搜索") {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => KeChengVideoSearchPage(text: searchList[i])));
-          } else {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ShitiSearchPage(text: searchList[i])));
-          }
-        },
-        child: Container(
-          padding: EdgeInsets.all(ScreenUtil().L(15)),
-          decoration: KBoxStyle.bottomLineStyle(),
-          child: Text(
-            "${searchList[i]}",
-            style: KFontConstant.defaultText(),
+      widgets.add(
+        InkWell(
+          onTap: () {
+            if (widget.name == "课程搜索") {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      KeChengVideoSearchPage(text: searchList[i]),
+                ),
+              );
+            } else {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ShitiSearchPage(text: searchList[i]),
+                ),
+              );
+            }
+          },
+          child: Container(
+            padding: EdgeInsets.all(ScreenUtil.L(15)),
+            decoration: KBoxStyle.bottomLineStyle(),
+            child: Text(searchList[i], style: KFontConstant.defaultText()),
           ),
         ),
-      ));
+      );
     }
     return widgets;
   }
