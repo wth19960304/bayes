@@ -220,7 +220,7 @@ class RequestMap {
 
   ///点踩
   static PublishSubject<StringBean> topicDisLike<BaseResponse>(
-    BaseIntercept baseIntercept,
+    BaseIntercept? baseIntercept,
     formData,
   ) {
     return HttpManager().post<StringBean>(
@@ -232,7 +232,7 @@ class RequestMap {
 
   ///点赞
   static PublishSubject<StringBean> topicLike<BaseResponse>(
-    BaseIntercept baseIntercept,
+    BaseIntercept? baseIntercept,
     formData,
   ) {
     return HttpManager().post<StringBean>(
@@ -256,7 +256,7 @@ class RequestMap {
 
   ///收藏
   static PublishSubject<StringBean> topicCollect<BaseResponse>(
-    BaseIntercept baseIntercept,
+    BaseIntercept? baseIntercept,
     formData,
   ) {
     return HttpManager().post<StringBean>(
