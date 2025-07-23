@@ -7,6 +7,7 @@ import 'package:bayes/constant/style.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
 import 'package:bayes/pages/KechengItem.dart';
+import 'package:bayes/pages/MyMessagePage.dart';
 import 'package:bayes/pages/SelectPage.dart';
 import 'package:bayes/pages/ShitiItem.dart';
 import 'package:bayes/pages/ShitiSearchPage.dart';
@@ -271,20 +272,12 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
       formData,
     ).listen(
       (data) {
-        if (_easyRefreshKey.currentState != null) {
-          _easyRefreshKey.currentState.callRefreshFinish();
-          _easyRefreshKey.currentState.callLoadMoreFinish();
-        }
         setState(() {
           pageStatue = LoadingWidgetStatue.NONE;
           this.data = data.data;
         });
       },
       onError: (err) {
-        if (_easyRefreshKey.currentState != null) {
-          _easyRefreshKey.currentState.callRefreshFinish();
-          _easyRefreshKey.currentState.callLoadMoreFinish();
-        }
         setState(() {
           pageStatue = LoadingWidgetStatue.ERROR;
         });
