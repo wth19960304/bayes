@@ -1,5 +1,3 @@
-import 'package:bayes/bean/TestHomeBean.dart';
-
 class TestBean {
   final int? state;
   final String? message;
@@ -38,16 +36,16 @@ class TestData {
   final List<AboutVideos>? aboutVideos;
   final List<TestOptionsList>? testOptionsList;
   final List<TestAnswersList>? testAnswersList;
-  final String? dislikeNum;
-  final String? likeNum;
+  late final String? dislikeNum;
+  late final String? likeNum;
   final String? shareNum;
-  final String? collectNum;
+  late final String? collectNum;
   final String? commentNum;
   final String? correctRate;
   final String? answerNum;
-  final String? isLike;
-  final String? isDisLike;
-  final String? isCollect;
+  late final String? isLike;
+  late final String? isDisLike;
+  late final String? isCollect;
 
   TestData({
     this.id,
