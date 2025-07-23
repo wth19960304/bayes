@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bayes/base/base_widget.dart';
 import 'package:bayes/base/common_function.dart';
+import 'package:bayes/bean/CommentBean.dart';
 import 'package:bayes/bean/CourseVideoDetailBean.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
@@ -9,15 +10,22 @@ import 'package:bayes/constant/style.dart';
 import 'package:bayes/dialog/BottomInputDialog.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
+import 'package:bayes/pages/OtherVideoItem.dart';
+import 'package:bayes/pages/SelectPage.dart';
+import 'package:bayes/pages/playerKongJian.dart';
 import 'package:bayes/utils/screen_util.dart';
+import 'package:bayes/utils/sp_constant.dart';
+import 'package:bayes/widget/CommentItem.dart';
 import 'package:dio/dio.dart';
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:wakelock/wakelock.dart';
 
 ///课程视频播放
+// ignore: must_be_immutable
 class VideoPage2 extends BaseWidget {
   int? id;
   int? videoId;
@@ -123,21 +131,21 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
         this.data = data.data!;
 
         for (int i = 0; i < (data.data!.courseVideos?.length ?? 0); i++) {
-          if (widget.videoId == data.data?.courseVideos[i].id) {
+          if (widget.videoId == data.data!.courseVideos[i].id) {
             selectIndex = i;
           }
         }
         playUrl = data.data!.courseVideos![selectIndex].url!;
         _setPlaySource(
           playUrl,
-          data.data!.courseVideos![selectIndex].name ?? '',
+          data.data!.courseVidndex].name ?? '',
         );
         setState(() {});
         _getCommentList();
       },
-      onError: (err) {
+      onError) {
         print("${err.message}");
-        setState(() {
+  setState(() {
           pageStatue = LoadingWidgetStatue.ERROR;
         });
       },
@@ -161,11 +169,11 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
           Container(
             margin: EdgeInsets.only(bottom: ScreenUtil.L(10)),
             child: Text(
-              "正在播放:${data.courseVideos[selectIndex].name}",
+              "正在播放:${data.courseVideos?[selectIndex].name}",
               style: KFontConstant.grayText(),
             ),
           ),
-          _jiaohuWidget(data.courseVideos[selectIndex]),
+          _jiaohuWidget(data.courseVideos![selectIndex]),
         ],
       ),
     );
@@ -206,7 +214,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
         children: <Widget>[
           _jiaohuItem(
             data,
-            data.likeNum,
+            data.likeNum ?? '',
             data.isLike == "1"
                 ? "images/dianzhan_true.png"
                 : "images/dianzhan_false.png",
@@ -214,7 +222,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
           ),
           _jiaohuItem(
             data,
-            data.dislikeNum,
+            data.dislikeNum ?? '',
             data.isDisLike == "1"
                 ? "images/diancai_true.png"
                 : "images/diancai_false.png",
@@ -222,7 +230,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
           ),
           _jiaohuItem(
             data,
-            data.collectNum,
+            data.collectNum ?? '',
             data.isCollect == "1"
                 ? "images/shoucang_true.png"
                 : "images/shoucang_false.png",
@@ -273,10 +281,10 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
       }
       setState(() {
         if (data.isLike != "1") {
-          data.likeNum = "${int.parse(data.likeNum) + 1}";
+          data.likeNum = "${int.parse(data.likeNum ?? '') + 1}";
           data.isLike = "1";
         } else {
-          data.likeNum = "${int.parse(data.likeNum) - 1}";
+          data.likeNum = "${int.parse(data.likeNum ?? '') - 1}";
           data.isLike = "0";
         }
       });
@@ -288,10 +296,10 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
       }
       setState(() {
         if (data.isDisLike != "1") {
-          data.dislikeNum = "${int.parse(data.dislikeNum) + 1}";
+          data.dislikeNum = "${int.parse(data.dislikeNum ??'') + 1}";
           data.isDisLike = "1";
         } else {
-          data.dislikeNum = "${int.parse(data.dislikeNum) - 1}";
+          data.dislikeNum = "${int.parse(data.dislikeNum ?? '') - 1}";
           data.isDisLike = "0";
         }
       });
@@ -307,10 +315,10 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
       _topicCollect();
       setState(() {
         if (data.isCollect != "1") {
-          data.collectNum = "${int.parse(data.collectNum) + 1}";
+          data.collectNum = "${int.parse(data.collectNum ?? '') + 1}";
           data.isCollect = "1";
         } else {
-          data.collectNum = "${int.parse(data.collectNum) - 1}";
+          data.collectNum = "${int.parse(data.collectNum ?? '') - 1}";
           data.isCollect = "0";
         }
       });
@@ -319,8 +327,8 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
         return;
       }
       showToast("开始下载...");
-      var name = data.url.split("/");
-      start(name[name.length - 1], data.url);
+      var name = data.url?.split("/");
+      start(name![name.length - 1], data.url ?? '');
     }
   }
 
@@ -328,7 +336,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
   bool loading = false;
 
   start(String name, String url) async {
-    if (sDCardDir == "") sDCardDir = (await getExternalStorageDirectory()).path;
+    if (sDCardDir == "") sDCardDir = (await getExternalStorageDirectory())!.path;
     var savePath = "$sDCardDir/videoBys/$name";
     File f = File("$sDCardDir/videoBys");
     if (!await f.exists()) {
@@ -383,7 +391,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
             child: Container(
               width: ScreenUtil.L(50),
               height: ScreenUtil.L(50),
-              decoration: KBoxStyle.next_btn(),
+              decoration: KBoxStyle.nextBtn(),
               alignment: Alignment.center,
               child: Text("课后\n练习", style: KFontConstant.whiteTextBig()),
             ),
@@ -396,7 +404,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
                 MaterialPageRoute(
                   builder: (context) => SelectPage(
                     type: "课后练习",
-                    id: data.courseVideos[selectIndex].id,
+                    id: data.courseVideos?[selectIndex].id,
                     subject: data.subject,
                     thematic: data.thematic,
                   ),
@@ -410,11 +418,9 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
           width: ScreenUtil.L(50),
           height: ScreenUtil.L(50),
           alignment: Alignment.center,
-          decoration: KBoxStyle.next_btn(),
+          decoration: KBoxStyle.nextBtn(),
           child: InkWell(
-            child: Container(
-              child: Text("吐槽", style: KFontConstant.whiteTextBig()),
-            ),
+            child: Text("吐槽", style: KFontConstant.whiteTextBig()),
             onTap: () {
               player.pause();
               //前往发布吐槽
@@ -446,7 +452,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
       ).listen((data) {}, onError: (err) {});
   }
 
-  List<CommentContent> listContent;
+  late List<CommentContent> listContent;
 
   ///获取视频评论列表
   _getCommentList() {
@@ -454,7 +460,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
       "pageNum": "1",
       "pageSize": "20",
       "topicType": "3", //主题类型 0 : 吐槽评论  1：视频评论 2：试题评论 3：课程评论
-      "topicId": "${data.courseVideos[selectIndex].id}",
+      "topicId": "${data.courseVideos?[selectIndex].id}",
       "courseManageId": "${widget.id}",
     };
     RequestMap.getCommentList(
@@ -462,7 +468,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
       formData,
     ).listen((data) {
       setState(() {
-        listContent = data.data.content;
+        listContent = data.data!.content!;
       });
     }, onError: (err) {});
   }
@@ -470,7 +476,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
   //评论列表
   _complaintsWidget() {
     return Container(
-      decoration: KBoxStyle.WhiteItemStyle(),
+      decoration: KBoxStyle.whiteItemStyle(),
       margin: EdgeInsets.only(top: ScreenUtil.L(15), bottom: ScreenUtil.L(30)),
       padding: EdgeInsets.only(bottom: ScreenUtil.L(20)),
       child: Column(
@@ -481,7 +487,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
               left: ScreenUtil.L(20),
               top: ScreenUtil.L(15),
             ),
-            child: Text("精彩评论", style: KFontConstant.blackTextBig_bold()),
+            child: Text("精彩评论", style: KFontConstant.blackTextBigBold()),
           ),
           _pinglunContent(),
         ],
@@ -494,7 +500,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
     if (listContent.isEmpty) {
       return baseStatueWidget(LoadingWidgetStatue.DATAEMPTY);
     }
-    List<Widget> widgets = List();
+    List<Widget> widgets = [];
     for (int i = 0; i < listContent.length; i++) {
       widgets.add(CommentItem(content: listContent[i]));
     }
@@ -537,11 +543,12 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
     //    player.start();
   }
 
-  final ScrollController _controller = null;
+  final Null _controller = null;
 
   ///课程视频列表
   _videoListWidget() {
-    if (data.courseVideos.length == 0) {
+    // ignore: prefer_is_empty
+    if (data.courseVideos?.length == 0) {
       return Container();
     }
     return Container(
@@ -565,7 +572,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
   }
 
   List<Widget> _videosList() {
-    List<Widget> listWidget = List();
+    List<Widget> listWidget = [];
     for (var i = 0; i < data.courseVideos.length; i++) {
       listWidget.add(_videoItemUI(i));
     }
@@ -679,12 +686,12 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
 
   ///相关知识点展示
   _otherVideoWidgets() {
-    List<AboutVideolist> aboutVideolist =
-        data.courseVideos[selectIndex].aboutVideolist;
-    if (aboutVideolist.isEmpty) {
+    List<AboutVideolist>? aboutVideolist =
+        data.courseVideos![selectIndex].aboutVideolist;
+    if (aboutVideolist!.isEmpty) {
       return Container();
     }
-    List<Widget> widgets = List();
+    List<Widget> widgets = [];
     widgets.add(
       Container(
         alignment: Alignment.topLeft,
@@ -693,14 +700,14 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
           top: ScreenUtil.L(15),
           bottom: ScreenUtil.L(5),
         ),
-        child: Text("相关知识点", style: KFontConstant.blackTextBig_bold()),
+        child: Text("相关知识点", style: KFontConstant.blackTextBigBold()),
       ),
     );
     for (int i = 0; i < aboutVideolist.length; i++) {
       widgets.add(
         OtherVideoItem(
           index: i,
-          name: aboutVideolist[i].name,
+          name: aboutVideolist[i].name ?? '',
           id: aboutVideolist[i].cmId,
           time: "${aboutVideolist[i].time}",
           videoId: aboutVideolist[i].cvId,

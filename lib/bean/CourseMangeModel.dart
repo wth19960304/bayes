@@ -27,7 +27,7 @@ class CourseData {
   final String? studyNum;
   final String? commentNum;
   final String? collectNum;
-  final String? isCollect;
+  late final String? isCollect;
   final String? courseContent;
   final List<CourseImg>? courseImg;
   final List<CourseLabel>? courseLabel;

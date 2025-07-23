@@ -2,31 +2,9 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:erp_music/base/base_inner_widget.dart';
-import 'package:erp_music/base/base_widget.dart';
-import 'package:erp_music/base/common_function.dart';
-import 'package:erp_music/bean/UserInfoBean.dart';
-import 'package:erp_music/constant/color.dart';
-import 'package:erp_music/constant/font.dart';
-import 'package:erp_music/network/intercept/showloading_intercept.dart';
-import 'package:erp_music/network/requestUtil.dart';
-import 'package:erp_music/ui/LoginRegister/login_page.dart';
-import 'package:erp_music/ui/UserInfo/ChengjiuPage.dart';
-import 'package:erp_music/ui/UserInfo/FirstUserInfoPage.dart';
-import 'package:erp_music/ui/UserInfo/MeInfoPage.dart';
-import 'package:erp_music/ui/UserInfo/MyMessagePage.dart';
-import 'package:erp_music/ui/UserInfo/ShiTiListPage.dart';
-import 'package:erp_music/ui/UserInfo/ShouCangPage.dart';
-import 'package:erp_music/ui/UserInfo/XiazaiPage.dart';
-import 'package:erp_music/ui/UserInfo/XuexiJiluuPage.dart';
-import 'package:erp_music/ui/widget/image_loading.dart';
-import 'package:erp_music/utils/screen_util.dart';
-import 'package:flutter_qq/flutter_qq.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:fluwx/fluwx.dart' as fluwx;
-import 'package:permission_handler/permission_handler.dart';
 
-import '../../tv_page.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 ///个人中心
 class MinePage extends BaseInnerWidget {
@@ -76,7 +54,11 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
                 ),
                 Text("$userInfo", style: KFontConstant.greyTextBig()),
                 Padding(
-                  padding: EdgeInsets.only(left: ScreenUtil().L(50), right: ScreenUtil().L(50), top: ScreenUtil().L(10)),
+                  padding: EdgeInsets.only(
+                    left: ScreenUtil().L(50),
+                    right: ScreenUtil().L(50),
+                    top: ScreenUtil().L(10),
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -151,10 +133,7 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
                       style: KFontConstant.appBarTiltleBig_bold(),
                     ),
                   ),
-                  Text(
-                    "${title[index]}",
-                    style: KFontConstant.grayText(),
-                  ),
+                  Text("${title[index]}", style: KFontConstant.grayText()),
                 ],
               ),
             ),
@@ -185,22 +164,24 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
             alignment: Alignment.center,
             height: ScreenUtil().L(90),
             child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().L(50))),
-                child: CachedNetworkImage(
-                  imageUrl: "${data.headImg == null || data.headImg.length == 0 ? "" : data.headImg[0].url}",
-                  placeholder: (context, url) => ImageLoadingPage(
-                    width: 20.0,
-                  ),
-                  errorWidget: (context, url, error) => Image.asset(
-                    "images/header_defalut.png",
-                    fit: BoxFit.cover,
-                    width: ScreenUtil().L(90),
-                    height: ScreenUtil().L(90),
-                  ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(ScreenUtil().L(50)),
+              ),
+              child: CachedNetworkImage(
+                imageUrl:
+                    "${data.headImg == null || data.headImg.length == 0 ? "" : data.headImg[0].url}",
+                placeholder: (context, url) => ImageLoadingPage(width: 20.0),
+                errorWidget: (context, url, error) => Image.asset(
+                  "images/header_defalut.png",
                   fit: BoxFit.cover,
                   width: ScreenUtil().L(90),
                   height: ScreenUtil().L(90),
-                )),
+                ),
+                fit: BoxFit.cover,
+                width: ScreenUtil().L(90),
+                height: ScreenUtil().L(90),
+              ),
+            ),
           ),
         ],
       ),
@@ -211,7 +192,11 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
   _buttom() {
     return Container(
       margin: EdgeInsets.only(top: ScreenUtil().L(20)),
-      padding: EdgeInsets.only(left: ScreenUtil().L(10), bottom: ScreenUtil().L(50), top: ScreenUtil().L(10)),
+      padding: EdgeInsets.only(
+        left: ScreenUtil().L(10),
+        bottom: ScreenUtil().L(50),
+        top: ScreenUtil().L(10),
+      ),
       color: KColorConstant.appBgColor,
       child: Column(
         children: <Widget>[
@@ -229,15 +214,24 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 InkWell(
-                    onTap: () {
-                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new MeInfoPage()));
-                    },
-                    child: Text("《用户协议》", style: KFontConstant.themeText())),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                        builder: (context) => new MeInfoPage(),
+                      ),
+                    );
+                  },
+                  child: Text("《用户协议》", style: KFontConstant.themeText()),
+                ),
                 InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => TextPage()));
-                    },
-                    child: Text("《隐私政策》", style: KFontConstant.themeText())),
+                  onTap: () {
+                    Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute(builder: (context) => TextPage()));
+                  },
+                  child: Text("《隐私政策》", style: KFontConstant.themeText()),
+                ),
               ],
             ),
           ),
@@ -247,7 +241,12 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
   }
 
   //底部单个布局
-  Widget _rowItemView(String title, String imageUrl, int index, {double paddingH = 14}) {
+  Widget _rowItemView(
+    String title,
+    String imageUrl,
+    int index, {
+    double paddingH = 14,
+  }) {
     return InkWell(
       onTap: () {
         _routePage(index);
@@ -264,13 +263,14 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
                   height: ScreenUtil().L(50),
                   width: ScreenUtil().L(50),
                   padding: EdgeInsets.only(
-                      left: ScreenUtil().L(12), right: ScreenUtil().L(12), top: ScreenUtil().L(paddingH), bottom: ScreenUtil().L(paddingH)),
+                    left: ScreenUtil().L(12),
+                    right: ScreenUtil().L(12),
+                    top: ScreenUtil().L(paddingH),
+                    bottom: ScreenUtil().L(paddingH),
+                  ),
                   child: Image.asset(imageUrl),
                 ),
-                Text(
-                  title,
-                  style: KFontConstant.defaultText(),
-                )
+                Text(title, style: KFontConstant.defaultText()),
               ],
             ),
             Container(
@@ -278,7 +278,7 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
               width: ScreenUtil().L(56),
               padding: EdgeInsets.all(ScreenUtil().L(20)),
               child: Image.asset("images/right_go.png"),
-            )
+            ),
           ],
         ),
       ),
@@ -289,7 +289,10 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
   _routePage(int index, {int type}) {
     //学习成就
     if (index == 0) {
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => new ChengjiuPage()));
+      Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new ChengjiuPage()),
+      );
     }
     if (index == 1) {
       showDialog<Null>(
@@ -322,13 +325,19 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
         print(val);
       });
     } else if (index == 2) {
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => new ShouCangPage()));
+      Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new ShouCangPage()),
+      );
     } else if (index == 3) {
       showShareDialog(title: "贝叶斯数学，内容全免费哟，快来下载和我一起学习吧！", type: "app");
     } else if (index == 4) {
       showToast("已是最新版本");
     } else if (index == 5) {
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => new MeInfoPage()));
+      Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new MeInfoPage()),
+      );
     } else if (index == 6) {
       showDialog<Null>(
         context: context,
@@ -336,9 +345,7 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
         builder: (BuildContext context) {
           return new AlertDialog(
             title: new Text('退出登录'),
-            content: new SingleChildScrollView(
-              child: new Text('您确定退出该账号吗？'),
-            ),
+            content: new SingleChildScrollView(child: new Text('您确定退出该账号吗？')),
             actions: <Widget>[
               new FlatButton(
                 child: new Text('取消'),
@@ -351,7 +358,12 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                  Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                      builder: (context) => new LoginPage(),
+                    ),
+                  );
                 },
               ),
             ],
@@ -362,18 +374,33 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
       });
     } else if (index == 98) {
       //消息中心
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => new MyMessagePage()));
+      Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new MyMessagePage()),
+      );
     } else if (index == 99) {
       //头像 - 个人中心
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => new FirstUserInfoPage()));
+      Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new FirstUserInfoPage()),
+      );
     } else if (index == 100) {
       //学习记录
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => new XuexiJiluPage()));
+      Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new XuexiJiluPage()),
+      );
     } else if (index == 101) {
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => new ShitiListPage()));
+      Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new ShitiListPage()),
+      );
     } else if (index == 102) {
       //缓存列表
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => new XiazaiPage()));
+      Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new XiazaiPage()),
+      );
     }
   }
 
@@ -427,16 +454,22 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
 
   ///获取用户信息
   _getUserInfo() {
-    var formData = {
-      "page": "1",
-    };
-    RequestMap.getUserInfo(ShowLoadingIntercept(this, isInit: true), formData).listen(
+    var formData = {"page": "1"};
+    RequestMap.getUserInfo(
+      ShowLoadingIntercept(this, isInit: true),
+      formData,
+    ).listen(
       (data) {
         setState(() {
           this.data = data.data;
           if (this.data.position == "") {
             //完善个人信息
-            Navigator.push(context, new MaterialPageRoute(builder: (context) => new FirstUserInfoPage()));
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => new FirstUserInfoPage(),
+              ),
+            );
           }
         });
       },

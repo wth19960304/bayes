@@ -278,7 +278,7 @@ class _SelectPageState extends BaseWidgetState<SelectPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => XuanzhetiWidget2(data.data, 0),
+            builder: (context) => XuanzhetiWidget2(data.data ?? '', 0),
           ),
         );
       },

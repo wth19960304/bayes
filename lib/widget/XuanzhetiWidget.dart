@@ -1,29 +1,27 @@
 import 'dart:core';
 
+import 'package:bayes/base/base_widget.dart';
+import 'package:bayes/base/common_function.dart';
+import 'package:bayes/bean/TestBean.dart';
+import 'package:bayes/constant/color.dart';
+import 'package:bayes/constant/font.dart';
+import 'package:bayes/constant/style.dart';
+import 'package:bayes/network/intercept/showloading_intercept.dart';
+import 'package:bayes/network/requestUtil.dart';
+import 'package:bayes/pages/OtherVideoItem.dart';
+import 'package:bayes/utils/PhotoViewSimpleScreen.dart';
+import 'package:bayes/utils/screen_util.dart';
+import 'package:bayes/widget/image_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:erp_music/base/base_widget.dart';
-import 'package:erp_music/base/common_function.dart';
-import 'package:erp_music/bean/TestBean.dart';
-import 'package:erp_music/constant/font.dart';
-import 'package:erp_music/constant/index_constant.dart';
-import 'package:erp_music/network/intercept/showloading_intercept.dart';
-import 'package:erp_music/network/requestUtil.dart';
-import 'package:erp_music/ui/study/CurriculumDetail/OtherVideoItem.dart';
-import 'package:erp_music/ui/widget/image_loading.dart';
-import 'package:erp_music/utils/screen_util.dart';
 import 'package:flutter/material.dart';
 
-import '../PhotoViewSimpleScreen.dart';
-import 'DaTiJg_Page.dart';
-
 //多选题Widget
+// ignore: must_be_immutable
 class XuanzhetiWidget extends BaseWidget {
   String id;
 
-  XuanzhetiWidget(String id) {
-    this.id = id;
-  }
+  XuanzhetiWidget(this.id, {super.key});
 
   @override
   BaseWidgetState<BaseWidget> getState() {
@@ -35,41 +33,42 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
   ///判断答题结束的状态
   bool overDating = false;
 
-  List<int> _selectList = List();
+  final List<int> _selectList = [];
 
-  TestData data;
+  late TestData data;
 
-  TextEditingController controller = new TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   ///是否显示推荐视频布局
   _video() {
     if (!overDating) {
       return Container();
     } else {
-      return Container(
-        child: Column(
-          children: <Widget>[
-            _VideoListWidget(),
-            _VideoListWidget2(),
-          ],
-        ),
+      return Column(
+        children: <Widget>[_VideoListWidget(), _VideoListWidget2()],
       );
     }
   }
 
   _widgets() {
-    List<BoxDecoration> des = [KBoxStyle.lvseRound4Bg(), KBoxStyle.orangeRound4Bg(), KBoxStyle.blueRound4Bg()];
+    List<BoxDecoration> des = [
+      KBoxStyle.lvseRound4Bg(),
+      KBoxStyle.orangeRound4Bg(),
+      KBoxStyle.blueRound4Bg(),
+    ];
     List<Widget> widgets = [];
-    for (int i = 0; i < data.testLabel.length; i++) {
-      widgets.add(Container(
-        margin: EdgeInsets.only(left: ScreenUtil().L(10)),
-        decoration: des[i % 3],
-        padding: EdgeInsets.all(ScreenUtil().L(2)),
-        child: Text(
-          "${data.testLabel[i].name}",
-          style: KFontConstant.defaultText(),
+    for (int i = 0; i < data.testLabel!.length; i++) {
+      widgets.add(
+        Container(
+          margin: EdgeInsets.only(left: ScreenUtil.L(10)),
+          decoration: des[i % 3],
+          padding: EdgeInsets.all(ScreenUtil.L(2)),
+          child: Text(
+            "${data.testLabel?[i].name}",
+            style: KFontConstant.defaultText(),
+          ),
         ),
-      ));
+      );
     }
     return widgets;
   }
@@ -78,8 +77,13 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
   _contentWidget() {
     return Container(
       decoration: KBoxStyle.shadowStyle(),
-      margin: EdgeInsets.only(bottom: ScreenUtil().L(20)),
-      padding: EdgeInsets.only(left: ScreenUtil().L(15), top: ScreenUtil().L(15), right: ScreenUtil().L(15), bottom: ScreenUtil().L(10)),
+      margin: EdgeInsets.only(bottom: ScreenUtil.L(20)),
+      padding: EdgeInsets.only(
+        left: ScreenUtil.L(15),
+        top: ScreenUtil.L(15),
+        right: ScreenUtil.L(15),
+        bottom: ScreenUtil.L(10),
+      ),
       child: Column(
         children: <Widget>[
           Stack(
@@ -87,7 +91,7 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
               Column(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(bottom: ScreenUtil().L(10)),
+                    margin: EdgeInsets.only(bottom: ScreenUtil.L(10)),
                     alignment: Alignment.topLeft,
                     child: Text(
                       "${data.testTopic}   (${data.typeName != "选择题" ? "${data.typeName}" : (data.selectType == "0" ? "单选题" : "多选题")})",
@@ -95,7 +99,7 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(bottom: ScreenUtil().L(10)),
+                    margin: EdgeInsets.only(bottom: ScreenUtil.L(10)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -103,74 +107,81 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
                           "练习正确率：${data.correctRate}%",
                           style: KFontConstant.greyTextSmall(),
                         ),
-                        Row(
-                          children: _widgets(),
-                        )
+                        Row(children: _widgets()),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               overDating
                   ? Container(
                       alignment: Alignment.centerRight,
-                      padding: EdgeInsets.all(ScreenUtil().L(5)),
+                      padding: EdgeInsets.all(ScreenUtil.L(5)),
                       child: Image.asset(
-                        isTrue == "false" ? "images/dati_error.png" : "images/dati_success.png",
-                        width: ScreenUtil().L(40),
+                        isTrue == "false"
+                            ? "images/dati_error.png"
+                            : "images/dati_success.png",
+                        width: ScreenUtil.L(40),
                       ),
                     )
                   : Container(),
             ],
           ),
-          data.testImg.length == 0
+          // ignore: prefer_is_empty
+          data.testImg?.length == 0
               ? Container()
               : InkWell(
                   onTap: () {
                     //展示大图
                     //展示大图
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            PhotoViewSimpleScreen(imageProvider: NetworkImage("${data.testImg[0].url}"), heroTag: 'simple')));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => PhotoViewSimpleScreen(
+                          imageProvider: NetworkImage(
+                            "${data.testImg?[0].url}",
+                          ),
+                          heroTag: 'simple',
+                        ),
+                      ),
+                    );
                   },
-                  child: Container(
-                    width: ScreenUtil().L(290),
+                  child: SizedBox(
+                    width: ScreenUtil.L(290),
                     child: ClipRRect(
                       child: CachedNetworkImage(
-                        imageUrl: "${data.testImg[0].url}",
-                        placeholder: (context, url) => ImageLoadingPage(
-                          width: 20.0,
-                        ),
+                        imageUrl: "${data.testImg?[0].url}",
+                        placeholder: (context, url) =>
+                            ImageLoadingPage(width: 20.0),
                         fit: BoxFit.fitWidth,
                       ),
                     ),
                   ),
                 ),
           Container(
-            margin: EdgeInsets.only(top: ScreenUtil().L(8), bottom: ScreenUtil().L(8)),
-            child: Wrap(
-              spacing: ScreenUtil().L(10),
-              children: _selectWidget(),
+            margin: EdgeInsets.only(
+              top: ScreenUtil.L(8),
+              bottom: ScreenUtil.L(8),
             ),
+            child: Wrap(spacing: ScreenUtil.L(10), children: _selectWidget()),
           ),
           (overDating)
               ? Container(
                   alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(bottom: ScreenUtil().L(10), left: ScreenUtil().L(5)),
-                  child: Text(
-                    "$zhengQueDA",
-                    style: KFontConstant.themeText(),
+                  margin: EdgeInsets.only(
+                    bottom: ScreenUtil.L(10),
+                    left: ScreenUtil.L(5),
                   ),
+                  child: Text(zhengQueDA, style: KFontConstant.themeText()),
                 )
               : Container(),
           (overDating && isTrue == "false")
               ? Container(
                   alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(bottom: ScreenUtil().L(10), left: ScreenUtil().L(5)),
-                  child: Text(
-                    "该题已加入您的错题集",
-                    style: KFontConstant.redText_bold(),
+                  margin: EdgeInsets.only(
+                    bottom: ScreenUtil.L(10),
+                    left: ScreenUtil.L(5),
                   ),
+                  child: Text("该题已加入您的错题集", style: KFontConstant.redTextBold()),
                 )
               : Container(),
           _jiaohuWidget(),
@@ -181,27 +192,29 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
 
   ///展示题目
   _selectWidget() {
-    List<Widget> listWidget = new List();
+    List<Widget> listWidget = [];
     if (data.typeName == "选择题") {
-      for (int i = 0; i < data.testOptionsList.length; i++) {
-        listWidget.add(_widgetSlectItem(data.testOptionsList[i], i));
+      for (int i = 0; i < data.testOptionsList!.length; i++) {
+        listWidget.add(_widgetSlectItem(data.testOptionsList![i], i));
       }
     } else if (data.typeName == "填空题") {
-      listWidget.add(Container(
-        decoration: KBoxStyle.btnYuanBgcolor(),
-        padding: EdgeInsets.all(ScreenUtil().L(10)),
-        child: TextField(
-          controller: controller,
-          //禁止输入
-          enabled: !overDating,
-          style: KFontConstant.defaultText(),
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: "请输入您的答案",
+      listWidget.add(
+        Container(
+          decoration: KBoxStyle.btnYuanBgcolor(),
+          padding: EdgeInsets.all(ScreenUtil.L(10)),
+          child: TextField(
+            controller: controller,
+            //禁止输入
+            enabled: !overDating,
+            style: KFontConstant.defaultText(),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "请输入您的答案",
+            ),
+            maxLines: 2,
           ),
-          maxLines: 2,
         ),
-      ));
+      );
     } else if (data.typeName == "判断题") {
       listWidget.add(_panduantiWidget("正确", 0));
       listWidget.add(_panduantiWidget("错误", 1));
@@ -236,38 +249,45 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
         }
       },
       child: Container(
-          color: KColorConstant.white,
-          width: ScreenUtil().L(140),
-          padding: EdgeInsets.only(top: ScreenUtil().L(15), bottom: ScreenUtil().L(15)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    height: ScreenUtil().L(18),
-                    margin: EdgeInsets.only(right: ScreenUtil().L(10)),
-                    child: Image.asset(
-                      _selectList.contains(index) ? "images/select_true.png" : "images/select_false.png",
-                    ),
+        color: KColorConstant.white,
+        width: ScreenUtil.L(140),
+        padding: EdgeInsets.only(
+          top: ScreenUtil.L(15),
+          bottom: ScreenUtil.L(15),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  height: ScreenUtil.L(18),
+                  margin: EdgeInsets.only(right: ScreenUtil.L(10)),
+                  child: Image.asset(
+                    _selectList.contains(index)
+                        ? "images/select_true.png"
+                        : "images/select_false.png",
                   ),
-                  Container(
-                    width: ScreenUtil().L(110),
-                    child: Text(
-                      "${numIndex[index]}：${content.optionName}",
-                      style: KFontConstant.defaultText(),
-                    ),
-                  )
-                ],
-              ),
-              content.optionImg.length == 0
-                  ? Container()
-                  : Container(
-                      margin: EdgeInsets.only(top: ScreenUtil().L(10)),
-                      child: _imageWidget(content.optionImg[0].url),
-                    ),
-            ],
-          )),
+                ),
+                SizedBox(
+                  width: ScreenUtil.L(110),
+                  child: Text(
+                    "${numIndex[index]}：${content.optionName}",
+                    style: KFontConstant.defaultText(),
+                  ),
+                ),
+              ],
+            ),
+            // ignore: prefer_is_empty
+            content.optionImg?.length == 0
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.only(top: ScreenUtil.L(10)),
+                    child: _imageWidget(content.optionImg![0].url ?? ''),
+                  ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -289,26 +309,27 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
           if (index == 0) {
             panduanDaAn = "true";
           } else
+            // ignore: curly_braces_in_flow_control_structures
             panduanDaAn = "false";
         });
       },
       child: Container(
         color: KColorConstant.white,
         width: ScreenUtil.screenWidth,
-        padding: EdgeInsets.only(top: ScreenUtil().L(15), bottom: ScreenUtil().L(15)),
+        padding: EdgeInsets.only(
+          top: ScreenUtil.L(15),
+          bottom: ScreenUtil.L(15),
+        ),
         child: Row(
           children: <Widget>[
             Container(
-              height: ScreenUtil().L(18),
-              margin: EdgeInsets.only(right: ScreenUtil().L(10)),
+              height: ScreenUtil.L(18),
+              margin: EdgeInsets.only(right: ScreenUtil.L(10)),
               child: Image.asset(
                 isSelect ? "images/select_true.png" : "images/select_false.png",
               ),
             ),
-            Text(
-              "${index + 1}：${content}",
-              style: KFontConstant.defaultText(),
-            ),
+            Text("${index + 1}：$content", style: KFontConstant.defaultText()),
           ],
         ),
       ),
@@ -319,18 +340,22 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
   _imageWidget(String image) {
     return InkWell(
       onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PhotoViewSimpleScreen(imageProvider: NetworkImage(image), heroTag: 'simple')));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PhotoViewSimpleScreen(
+              imageProvider: NetworkImage(image),
+              heroTag: 'simple',
+            ),
+          ),
+        );
       },
       child: Container(
-        width: ScreenUtil().L(150),
+        width: ScreenUtil.L(150),
         child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().L(7))),
+          borderRadius: BorderRadius.all(Radius.circular(ScreenUtil.L(7))),
           child: CachedNetworkImage(
             imageUrl: "$image",
-            placeholder: (context, url) => ImageLoadingPage(
-              width: 20.0,
-            ),
+            placeholder: (context, url) => ImageLoadingPage(width: 20.0),
           ),
         ),
       ),
@@ -344,17 +369,32 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
     }
     return Container(
       width: ScreenUtil.screenWidth,
-      margin: EdgeInsets.only(
-        left: ScreenUtil().L(10),
-        right: ScreenUtil().L(10),
-      ),
+      margin: EdgeInsets.only(left: ScreenUtil.L(10), right: ScreenUtil.L(10)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          _jiaohuItem(data.likeNum, data.isLike == "1" ? "images/dianzhan_true.png" : "images/dianzhan_false.png", "点赞"),
-          _jiaohuItem(data.dislikeNum, data.isDisLike == "1" ? "images/diancai_true.png" : "images/diancai_false.png", "点踩"),
-          _jiaohuItem(data.collectNum, data.isCollect == "1" ? "images/shoucang_true.png" : "images/shoucang_false.png", "收藏"),
-//          _jiaohuItem(data.commentNum, "images/fenxiang_true.png", "评论"),
+          _jiaohuItem(
+            data.likeNum ?? '',
+            data.isLike == "1"
+                ? "images/dianzhan_true.png"
+                : "images/dianzhan_false.png",
+            "点赞",
+          ),
+          _jiaohuItem(
+            data.dislikeNum ?? '',
+            data.isDisLike == "1"
+                ? "images/diancai_true.png"
+                : "images/diancai_false.png",
+            "点踩",
+          ),
+          _jiaohuItem(
+            data.collectNum ?? '',
+            data.isCollect == "1"
+                ? "images/shoucang_true.png"
+                : "images/shoucang_false.png",
+            "收藏",
+          ),
+          //          _jiaohuItem(data.commentNum, "images/fenxiang_true.png", "评论"),
           _jiaohuItem("分享", "images/fenxiang_true.png", "分享"),
         ],
       ),
@@ -370,15 +410,13 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-              margin: EdgeInsets.only(bottom: ScreenUtil().L(5)),
-              width: ScreenUtil().L(35),
-              height: ScreenUtil().L(35),
-              padding: EdgeInsets.all(ScreenUtil().L(3)),
-              child: Image.asset("$image")),
-          Text(
-            "$num",
-            style: KFontConstant.grayText(),
+            margin: EdgeInsets.only(bottom: ScreenUtil.L(5)),
+            width: ScreenUtil.L(35),
+            height: ScreenUtil.L(35),
+            padding: EdgeInsets.all(ScreenUtil.L(3)),
+            child: Image.asset(image),
           ),
+          Text(num, style: KFontConstant.grayText()),
         ],
       ),
     );
@@ -392,10 +430,10 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
       }
       setState(() {
         if (data.isLike == "1") {
-          data.likeNum = "${int.parse(data.likeNum) - 1}";
+          data.likeNum = "${int.parse(data.likeNum ?? '') - 1}";
           data.isLike = "0";
         } else {
-          data.likeNum = "${int.parse(data.likeNum) + 1}";
+          data.likeNum = "${int.parse(data.likeNum ?? '') + 1}";
           data.isLike = "1";
         }
       });
@@ -407,24 +445,29 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
       }
       setState(() {
         if (data.isDisLike == "1") {
-          data.dislikeNum = "${int.parse(data.dislikeNum) - 1}";
+          data.dislikeNum = "${int.parse(data.dislikeNum ?? '') - 1}";
           data.isDisLike = "0";
         } else {
-          data.dislikeNum = "${int.parse(data.dislikeNum) + 1}";
+          data.dislikeNum = "${int.parse(data.dislikeNum ?? '') + 1}";
           data.isDisLike = "1";
         }
       });
       _likeOrDisLike(false);
     } else if (tag == "分享") {
-      showShareDialog(title: "贝叶斯数学，内容全免费哟，快来下载和我一起学习吧！", type: "app");
+      showShareDialog(
+        title: "贝叶斯数学，内容全免费哟，快来下载和我一起学习吧！",
+        type: "app",
+        id: '',
+        videoType: '',
+      );
     } else if (tag == "收藏") {
       _topicCollect();
       setState(() {
         if (data.isCollect == "1") {
-          data.collectNum = "${int.parse(data.collectNum) - 1}";
+          data.collectNum = "${int.parse(data.collectNum ?? '') - 1}";
           data.isCollect = "0";
         } else {
-          data.collectNum = "${int.parse(data.collectNum) + 1}";
+          data.collectNum = "${int.parse(data.collectNum ?? '') + 1}";
           data.isCollect = "1";
         }
       });
@@ -438,9 +481,14 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
       "topicType": "3000", //主题类型（评论：1000，吐槽：2000  试题：3000  视频：4000  课程视频：5000）
     };
     if (like)
+      // ignore: curly_braces_in_flow_control_structures
       RequestMap.topicLike(null, formData).listen((data) {}, onError: (err) {});
     else
-      RequestMap.topicDisLike(null, formData).listen((data) {}, onError: (err) {});
+      // ignore: curly_braces_in_flow_control_structures
+      RequestMap.topicDisLike(
+        null,
+        formData,
+      ).listen((data) {}, onError: (err) {});
   }
 
   ///用户收藏
@@ -449,7 +497,10 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
       "topicId": "${data.id}",
       "topicType": "3000", //主题类型（评论：1000，吐槽：2000  试题：3000  视频：4000  课程视频：5000）
     };
-    RequestMap.topicCollect(null, formData).listen((data) {}, onError: (err) {});
+    RequestMap.topicCollect(
+      null,
+      formData,
+    ).listen((data) {}, onError: (err) {});
   }
 
   ///按钮布局
@@ -464,7 +515,7 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
       ];
     }
     return Container(
-      margin: EdgeInsets.only(left: ScreenUtil().L(30), right: ScreenUtil().L(30)),
+      margin: EdgeInsets.only(left: ScreenUtil.L(30), right: ScreenUtil.L(30)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: widgets,
@@ -474,8 +525,8 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
 
   ///按钮widget
   _btnWidget(String title, String images) {
-    return Container(
-      width: ScreenUtil().L(85),
+    return SizedBox(
+      width: ScreenUtil.L(85),
       child: InkWell(
         onTap: () {
           _btnNext(title);
@@ -483,13 +534,8 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            Container(
-              child: Image.asset(images),
-            ),
-            Text(
-              "$title",
-              style: KFontConstant.whiteTextBig(),
-            )
+            Image.asset(images),
+            Text(title, style: KFontConstant.whiteTextBig()),
           ],
         ),
       ),
@@ -505,58 +551,66 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
   }
 
   ///讲解视频
+  // ignore: non_constant_identifier_names
   _VideoListWidget() {
-    if (data.explainVideoName == null || data.explainVideoName.length < 1) {
+    if (data.explainVideoName == null || data.explainVideoName!.length < 1) {
       return Container();
     }
     return Container(
       decoration: KBoxStyle.shadowStyle(),
-      margin: EdgeInsets.only(bottom: ScreenUtil().L(15)),
-      padding: EdgeInsets.only(bottom: ScreenUtil().L(10)),
+      margin: EdgeInsets.only(bottom: ScreenUtil.L(15)),
+      padding: EdgeInsets.only(bottom: ScreenUtil.L(10)),
       child: Column(
         children: <Widget>[
           Container(
             alignment: Alignment.topLeft,
-            margin: EdgeInsets.only(left: ScreenUtil().L(20), top: ScreenUtil().L(15), bottom: ScreenUtil().L(15)),
-            child: Text(
-              "讲解视频",
-              style: KFontConstant.blackTextBig_bold(),
+            margin: EdgeInsets.only(
+              left: ScreenUtil.L(20),
+              top: ScreenUtil.L(15),
+              bottom: ScreenUtil.L(15),
             ),
+            child: Text("讲解视频", style: KFontConstant.blackTextBigBold()),
           ),
-          OtherVideoItem(name: data.explainVideoName, id: int.parse(data.explainVideo), isVideo: true),
+          OtherVideoItem(
+            name: data.explainVideoName ?? "",
+            id: int.parse(data.explainVideo ?? ""),
+            isVideo: true,
+          ),
         ],
       ),
     );
   }
 
   ///相关知识点
+  // ignore: non_constant_identifier_names
   _VideoListWidget2() {
-    List<Widget> widgets = new List();
+    List<Widget> widgets = [];
     widgets.add(
       Container(
         alignment: Alignment.topLeft,
-        margin: EdgeInsets.only(left: ScreenUtil().L(20), top: ScreenUtil().L(15), bottom: ScreenUtil().L(15)),
-        child: Text(
-          "相关知识点",
-          style: KFontConstant.blackTextBig_bold(),
+        margin: EdgeInsets.only(
+          left: ScreenUtil.L(20),
+          top: ScreenUtil.L(15),
+          bottom: ScreenUtil.L(15),
         ),
+        child: Text("相关知识点", style: KFontConstant.blackTextBigBold()),
       ),
     );
-    for (int x = 0; x < data.aboutVideos.length; x++) {
+    for (int x = 0; x < data.aboutVideos!.length; x++) {
       widgets.add(
         OtherVideoItem(
           index: x,
-          name: data.aboutVideos[x].name,
-          id: data.aboutVideos[x].cmId,
-          time: data.aboutVideos[x].time,
-          videoId: data.aboutVideos[x].cvId,
+          name: data.aboutVideos?[x].name ?? "",
+          id: data.aboutVideos?[x].cmId ?? 0,
+          time: data.aboutVideos?[x].time ?? "",
+          videoId: data.aboutVideos?[x].cvId ?? 0,
         ),
       );
     }
     return Container(
       decoration: KBoxStyle.shadowStyle(),
-      margin: EdgeInsets.only(bottom: ScreenUtil().L(15)),
-      padding: EdgeInsets.only(bottom: ScreenUtil().L(10)),
+      margin: EdgeInsets.only(bottom: ScreenUtil.L(15)),
+      padding: EdgeInsets.only(bottom: ScreenUtil.L(10)),
       child: Column(children: widgets),
     );
   }
@@ -591,18 +645,11 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.all(ScreenUtil().L(15)),
-            child: Column(
-              children: <Widget>[
-                _contentWidget(),
-                _video(),
-              ],
-            ),
+            margin: EdgeInsets.all(ScreenUtil.L(15)),
+            child: Column(children: <Widget>[_contentWidget(), _video()]),
           ),
           _btnWidgetList(),
-          Container(
-            height: ScreenUtil().L(30),
-          ),
+          Container(height: ScreenUtil.L(30)),
         ],
       ),
     );
@@ -610,18 +657,22 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
 
   ///获取一道题
   _beginTest() {
-    var formData = {
-      "id": "${widget.id}",
-    };
-    RequestMap.getTestManage(ShowLoadingIntercept(this, isInit: true), formData).listen((data) {
-      setState(() {
-        this.data = data.data;
-        pageStatue = LoadingWidgetStatue.NONE;
-      });
-    }, onError: (err) {
-      print(err.message);
-      pageStatue = LoadingWidgetStatue.ERROR;
-    });
+    var formData = {"id": widget.id};
+    RequestMap.getTestManage(
+      ShowLoadingIntercept(this, isInit: true),
+      formData,
+    ).listen(
+      (data) {
+        setState(() {
+          this.data = data.data!;
+          pageStatue = LoadingWidgetStatue.NONE;
+        });
+      },
+      onError: (err) {
+        print(err.message);
+        pageStatue = LoadingWidgetStatue.ERROR;
+      },
+    );
   }
 
   //答案组装
@@ -637,9 +688,9 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
     if (data.typeName == "选择题") {
       daAn = _selectList.toString();
       //正确答案组装
-      List<int> trueIndex = new List();
-      for (int i = 0; i < data.testOptionsList.length; i++) {
-        if (data.testOptionsList[i].optionTrue == "true") {
+      List<int> trueIndex = [];
+      for (int i = 0; i < data.testOptionsList!.length; i++) {
+        if (data.testOptionsList?[i].optionTrue == "true") {
           trueIndex.add(i);
           zhengQueDA += "${numIndex[i]},";
         }
@@ -657,17 +708,17 @@ class _XuanzhetiWidgetState extends BaseWidgetState<XuanzhetiWidget> {
     } else if (data.typeName == "填空题") {
       daAn = controller.text;
       //正确答案组装
-      List<String> trueIndex = new List();
-      for (int i = 0; i < data.testAnswersList.length; i++) {
-        trueIndex.add(data.testAnswersList[i].answer);
-        zhengQueDA += "${data.testAnswersList[i].answer},";
+      List<String> trueIndex = [];
+      for (int i = 0; i < data.testAnswersList!.length; i++) {
+        trueIndex.add(data.testAnswersList![i].answer ?? '');
+        zhengQueDA += "${data.testAnswersList?[i].answer},";
       }
       daAnTrue = trueIndex.toString();
       isTrue = "${trueIndex.contains(daAn)}";
     } else if (data.typeName == "判断题") {
       daAn = panduanDaAn;
       zhengQueDA += "${data.isTrue}";
-      daAnTrue = data.isTrue;
+      daAnTrue = data.isTrue!;
     }
     //不会做
     if (isNone) {

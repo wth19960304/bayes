@@ -55,7 +55,7 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
               pageNum++;
               await _getGoods();
             },
-            refreshHeader: ClassicsHeader(
+            refreshHeader: ClassicalHeader(
               key: _headerKey,
               refreshText: '下拉刷新',
               refreshReadyText: '释放刷新',
@@ -67,7 +67,7 @@ class _ShitiSearchPageState extends BaseWidgetState<ShitiSearchPage> {
               moreInfoColor: Colors.black54,
               showMore: true,
             ),
-            refreshFooter: ClassicsFooter(
+            refreshFooter: ClassicalFooter(
               key: _footerKey,
               loadText: '上拉加载',
               loadReadyText: '释放加载',

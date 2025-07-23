@@ -148,7 +148,7 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
 
   @override
   void onCreate() {
-    searchList = SpUtils().getString(SpConstanst.SEARCH_LIST).split("&&&");
+    searchList = SpUtils().getString(SpConstanst.SEARCH_LIST)!.split("&&&");
     searchList.remove("");
     if (searchList.isEmpty) {
       statue = LoadingWidgetStatue.DATAEMPTY;
@@ -180,7 +180,7 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text("历史搜索", style: KFontConstant.defaultText_bold()),
+          Text("历史搜索", style: KFontConstant.defaultTextBold()),
           InkWell(
             onTap: () {
               _deleteAll();
@@ -214,7 +214,7 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
   }
 
   _listItems() {
-    List<Widget> widgets = List();
+    List<Widget> widgets = [];
     for (int i = 0; i < searchList.length; i++) {
       widgets.add(
         InkWell(

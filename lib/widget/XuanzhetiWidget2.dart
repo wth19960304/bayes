@@ -65,7 +65,7 @@ class _XuanzhetiWidgetState2 extends BaseWidgetState<XuanzhetiWidget2> {
           decoration: des[i % 3],
           padding: EdgeInsets.all(ScreenUtil.L(2)),
           child: Text(
-            "${data.testLabel[i].name}",
+            "${data.testLabel?[i].name}",
             style: KFontConstant.defaultText(),
           ),
         ),
@@ -202,8 +202,8 @@ class _XuanzhetiWidgetState2 extends BaseWidgetState<XuanzhetiWidget2> {
   _selectWidget() {
     List<Widget> listWidget = [];
     if (data.typeName == "选择题") {
-      for (int i = 0; i < data.testOptionsList.length; i++) {
-        listWidget.add(_widgetSlectItem(data.testOptionsList[i], i));
+      for (int i = 0; i < (data.testOptionsList?.length ?? 0); i++) {
+        listWidget.add(_widgetSlectItem(data.testOptionsList![i], i));
       }
     } else if (data.typeName == "填空题") {
       listWidget.add(
@@ -716,7 +716,7 @@ class _XuanzhetiWidgetState2 extends BaseWidgetState<XuanzhetiWidget2> {
       //正确答案组装
       List<int> trueIndex = [];
       for (int i = 0; i < data.testOptionsList!.length; i++) {
-        if (data.testOptionsList[i].optionTrue == "true") {
+        if (data.testOptionsList?[i].optionTrue == "true") {
           trueIndex.add(i);
           zhengQueDA += "${numIndex[i]},";
         }
@@ -737,7 +737,7 @@ class _XuanzhetiWidgetState2 extends BaseWidgetState<XuanzhetiWidget2> {
       List<String> trueIndex = [];
       for (int i = 0; i < data.testAnswersList!.length; i++) {
         trueIndex.add(data.testAnswersList![i].answer ?? '');
-        zhengQueDA += "${data.testAnswersList[i].answer},";
+        zhengQueDA += "${data.testAnswersList?[i].answer},";
       }
       daAnTrue = trueIndex.toString();
       isTrue = "${trueIndex.contains(daAn)}";

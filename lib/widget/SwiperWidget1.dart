@@ -1,27 +1,25 @@
+import 'package:bayes/bean/CourseMangeModel.dart';
+import 'package:bayes/utils/screen_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:erp_music/bean/CourseMangeModel.dart';
-import 'package:erp_music/utils/screen_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutter_page_indicator/flutter_page_indicator.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 import '../../widget/image_loading.dart';
 
 //轮播
+// ignore: must_be_immutable
 class SwiperWidget1 extends StatelessWidget {
-  List<CourseImg> images;
+  List<CourseImg>? images;
 
-  SwiperWidget1({List<CourseImg> images}) {
-    this.images = images;
-  }
+  SwiperWidget1({super.key,  this.images}) 
 
   @override
   Widget build(BuildContext context) {
-    if (images == null || images.length < 1) {
+    if (images == null || images!.isEmpty) {
       return Container();
     }
-    return Container(
-      height: ScreenUtil().L(200),
+    return SizedBox(
+      height: ScreenUtil.L(200),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -35,7 +33,7 @@ class SwiperWidget1 extends StatelessWidget {
             ),
           ); //添加图片并设置图片样式
         },
-        itemCount: images != null ? images.length : 0,
+        itemCount: images != null ? images?.length ?? 0: 0,
         pagination: SwiperPagination(
           alignment: Alignment.bottomRight,
         ),

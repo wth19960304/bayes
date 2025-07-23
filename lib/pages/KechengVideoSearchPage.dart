@@ -1,4 +1,13 @@
 import 'package:bayes/base/base_widget.dart';
+import 'package:bayes/base/common_function.dart';
+import 'package:bayes/bean/kechengvideo_model.dart';
+import 'package:bayes/constant/color.dart';
+import 'package:bayes/constant/font.dart';
+import 'package:bayes/constant/style.dart';
+import 'package:bayes/network/intercept/showloading_intercept.dart';
+import 'package:bayes/network/requestUtil.dart';
+import 'package:bayes/study/KechengVideoItem.dart';
+import 'package:bayes/utils/screen_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -28,13 +37,6 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
 
   late double deviceWidth;
 
-  final GlobalKey<EasyRefreshState> _easyRefreshKey =
-      GlobalKey<EasyRefreshState>();
-  final GlobalKey<RefreshHeaderState> _headerKey =
-      GlobalKey<RefreshHeaderState>();
-  final GlobalKey<RefreshFooterState> _footerKey =
-      GlobalKey<RefreshFooterState>();
-
   LoadingWidgetStatue pageStatue = LoadingWidgetStatue.LOADING;
 
   int pageNum = 1;
@@ -50,29 +52,26 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
       children: <Widget>[
         Expanded(
           child: EasyRefresh(
-            key: _easyRefreshKey,
-            autoControl: false,
+            // autoControl: false,
             onRefresh: () async {
               pageNum = 1;
               await _getGoods();
             },
-            loadMore: () async {
-              await _getGoods();
-            },
-            refreshHeader: ClassicsHeader(
-              key: _headerKey,
+            // loadMore: () async {
+            //   await _getGoods();
+            // },
+            header: ClassicalHeader(
               refreshText: '下拉刷新',
               refreshReadyText: '释放刷新',
               refreshingText: '正在刷新...',
               refreshedText: '刷新结束',
-              moreInfo: '更新于 %T',
+              // moreInfo: '更新于 %T',
               bgColor: Colors.transparent,
               textColor: Colors.black87,
-              moreInfoColor: Colors.black54,
-              showMore: true,
+              infoColor: Colors.black54,
+              showInfo: true,
             ),
-            refreshFooter: ClassicsFooter(
-              key: _footerKey,
+            footer: ClassicalFooter(
               loadText: '上拉加载',
               loadReadyText: '释放加载',
               loadingText: '正在加载',
@@ -80,8 +79,8 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
               noMoreText: '没有更多数据',
               bgColor: Colors.transparent,
               textColor: Colors.black87,
-              moreInfoColor: Colors.black54,
-              showMore: true,
+              infoColor: Colors.black54,
+              showInfo: true,
             ),
             child: _listWidget(),
           ),
@@ -96,8 +95,8 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
       return super.getAppBar();
     }
     return Container(
-      padding: EdgeInsets.only(right: ScreenUtil().L(15)),
-      height: ScreenUtil().L(50),
+      padding: EdgeInsets.only(right: ScreenUtil.L(15)),
+      height: ScreenUtil.L(50),
       width: double.infinity,
       color: KColorConstant.appBgColor,
       child: Row(
@@ -106,33 +105,33 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
           InkWell(
             onTap: clickAppBarBack,
             child: Container(
-              height: ScreenUtil().L(46),
-              width: ScreenUtil().L(46),
+              height: ScreenUtil.L(46),
+              width: ScreenUtil.L(46),
               padding: EdgeInsets.only(
-                top: ScreenUtil().L(15),
-                bottom: ScreenUtil().L(15),
-                right: ScreenUtil().L(15),
-                left: ScreenUtil().L(15),
+                top: ScreenUtil.L(15),
+                bottom: ScreenUtil.L(15),
+                right: ScreenUtil.L(15),
+                left: ScreenUtil.L(15),
               ),
               child: Image.asset("images/left_go.png"),
             ),
           ),
           Container(
-            height: ScreenUtil().L(30),
+            height: ScreenUtil.L(30),
             padding: EdgeInsets.only(left: 10),
-            width: ScreenUtil().L(230),
+            width: ScreenUtil.L(230),
             decoration: KBoxStyle.btnYuanBgcolor(),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: ScreenUtil().L(15),
-                  width: ScreenUtil().L(20),
+                  height: ScreenUtil.L(15),
+                  width: ScreenUtil.L(20),
                   child: Image.asset("images/search_icon.png"),
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: ScreenUtil().L(5)),
+                    padding: EdgeInsets.only(left: ScreenUtil.L(5)),
                     child: TextField(
                       //                        controller: controller,
                       style: KFontConstant.defaultText(),
@@ -149,10 +148,10 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
               _goSearch();
             },
             child: Container(
-              margin: EdgeInsets.only(left: ScreenUtil().L(10)),
-              decoration: KBoxStyle.select_true(),
-              height: ScreenUtil().L(28),
-              width: ScreenUtil().L(50),
+              margin: EdgeInsets.only(left: ScreenUtil.L(10)),
+              decoration: KBoxStyle.selectTrue(),
+              height: ScreenUtil.L(28),
+              width: ScreenUtil.L(50),
               child: Center(
                 child: Text("搜索", style: KFontConstant.whiteText()),
               ),
@@ -181,7 +180,7 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
     setNoDataString("未搜索到相关课程视频");
     setTopBarVisible(true);
     if (widget.id != null) {
-      setAppBarTitle(widget.typeName);
+      setAppBarTitle(widget.typeName ?? '');
       setAppBarRightTitle("");
     } else {
       editingController = TextEditingController(text: widget.text);
@@ -194,12 +193,12 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
   @override
   void onResume() {}
 
-  List<KeChengVideo> data = List();
+  List<KeChengVideo> data = [];
 
   ///历史搜索列表
   _listWidget() {
     return ListView.builder(
-      padding: EdgeInsets.only(top: ScreenUtil().L(10)),
+      padding: EdgeInsets.only(top: ScreenUtil.L(10)),
       itemCount: data.length,
       itemBuilder: (BuildContext context, int index) {
         //Widget Function(BuildContext context, int index)
@@ -214,6 +213,7 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
     var formData = {
       "pageNum": page,
       "pageSize": "20",
+      // ignore: unnecessary_null_comparison
       "name": editingController != null ? editingController.text : "", //搜索内容
     };
     RequestMap.getListKeChengShiPinApp(
@@ -221,11 +221,11 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
       formData,
     ).listen(
       (data) {
-        if (_easyRefreshKey.currentState != null) {
-          _easyRefreshKey.currentState.callRefreshFinish();
-          _easyRefreshKey.currentState.callLoadMoreFinish();
-        }
-        if (data.data.total == 0) {
+        // if (_easyRefreshKey.currentState != null) {
+        //   _easyRefreshKey.currentState.callRefreshFinish();
+        //   _easyRefreshKey.currentState.callLoadMoreFinish();
+        // }
+        if (data.data?.total == 0) {
           setState(() {
             pageStatue = LoadingWidgetStatue.DATAEMPTY;
           });
@@ -233,9 +233,9 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
         }
         setState(() {
           if (pageNum == 1) {
-            this.data = data.data.content;
+            this.data = data.data!.content!;
           } else {
-            this.data.addAll(data.data.content);
+            this.data.addAll(data.data!.content ?? []);
           }
           pageNum++;
           pageStatue = LoadingWidgetStatue.NONE;
@@ -243,10 +243,10 @@ class _State extends BaseWidgetState<KeChengVideoSearchPage> {
       },
       onError: (err) {
         print(err.message);
-        if (_easyRefreshKey.currentState != null) {
-          _easyRefreshKey.currentState.callRefreshFinish();
-          _easyRefreshKey.currentState.callLoadMoreFinish();
-        }
+        // if (_easyRefreshKey.currentState != null) {
+        //   _easyRefreshKey.currentState.callRefreshFinish();
+        //   _easyRefreshKey.currentState.callLoadMoreFinish();
+        // }
         setState(() {
           pageStatue = LoadingWidgetStatue.ERROR;
         });

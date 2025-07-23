@@ -47,11 +47,11 @@ class _CurriculumDetailPageState extends BaseWidgetState<CurriculumDetailPage> {
         id: widget.id,
         courseVideos: courseData.courseVideos,
       ),
-      CurriclumDetailPage2(content: courseData.courseContent),
+      CurriclumDetailPage2(contentString: courseData.courseContent),
       CurriclumDetailPage3(
         lectorProfile: courseData.lectorProfile,
         name: courseData.lector,
-        content: "${courseData.lectorProfile}",
+        contentString: "${courseData.lectorProfile}",
         header: "",
       ),
     ];
@@ -129,7 +129,8 @@ class _CurriculumDetailPageState extends BaseWidgetState<CurriculumDetailPage> {
           Visibility(
             visible:
                 courseData.courseVideos != null &&
-                courseData.courseVideos.length != 0,
+                // ignore: prefer_is_empty
+                courseData.courseVideos?.length != 0,
             child: Container(
               margin: EdgeInsets.only(
                 left: ScreenUtil.L(40),
@@ -229,12 +230,7 @@ class _CurriculumDetailPageState extends BaseWidgetState<CurriculumDetailPage> {
     );
   }
 
-  Widget _gridViewItemUI({
-    String title,
-    bool isSelect,
-    int index,
-    String time,
-  }) {
+  Widget _gridViewItemUI({String? title, bool? isSelect, int? index}) {
     return Container(
       height: ScreenUtil.L(35),
       padding: EdgeInsets.only(top: ScreenUtil.L(5)),
@@ -242,7 +238,7 @@ class _CurriculumDetailPageState extends BaseWidgetState<CurriculumDetailPage> {
       child: InkWell(
         onTap: () {
           setState(() {
-            pageSelect = index;
+            pageSelect = index!;
           });
           _topage();
         },
@@ -254,9 +250,9 @@ class _CurriculumDetailPageState extends BaseWidgetState<CurriculumDetailPage> {
               height: ScreenUtil.L(20),
               child: Center(
                 child: Text(
-                  title,
-                  style: isSelect
-                      ? KFontConstant.blackTextBig_bold()
+                  title ?? '',
+                  style: isSelect ?? false
+                      ? KFontConstant.blackTextBigBold()
                       : KFontConstant.grayText(),
                 ),
               ),
@@ -265,7 +261,9 @@ class _CurriculumDetailPageState extends BaseWidgetState<CurriculumDetailPage> {
               height: ScreenUtil.L(2),
               width: ScreenUtil.L(30),
               margin: EdgeInsets.only(top: ScreenUtil.L(5)),
-              color: isSelect ? KColorConstant.themeColor : Colors.transparent,
+              color: isSelect ?? false
+                  ? KColorConstant.themeColor
+                  : Colors.transparent,
             ),
           ],
         ),
@@ -276,7 +274,7 @@ class _CurriculumDetailPageState extends BaseWidgetState<CurriculumDetailPage> {
   int pageSelect = 0;
 
   List<Widget> _carShopItem() {
-    List<Widget> listWidget = List();
+    List<Widget> listWidget = [];
     listWidget.add(
       _gridViewItemUI(title: "课程目录", isSelect: pageSelect == 0, index: 0),
     );

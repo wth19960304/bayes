@@ -1,4 +1,6 @@
 import 'package:bayes/bean/StudyHomeBean.dart';
+import 'package:bayes/pages/CurriclumDetailPage.dart';
+import 'package:bayes/pages/VideoPage.dart';
 import 'package:bayes/utils/screen_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,18 +27,19 @@ class SwiperWidget extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              if (images[index].type == "跳转到视频") {
+              if (images?[index].type == "跳转到视频") {
                 Navigator.of(context).push(
                   CupertinoPageRoute(
-                    builder: (_) =>
-                        VideoPage(id: int.parse(images![index].bounce!.id)),
+                    builder: (_) => VideoPage(
+                      id: int.parse(images![index].bounce!.id ?? ''),
+                    ),
                   ),
                 );
               } else if (images?[index].type == "跳转到课程") {
                 Navigator.of(context).push(
                   CupertinoPageRoute(
                     builder: (_) => CurriculumDetailPage(
-                      id: int.parse(images[index].bounce.id),
+                      id: int.parse(images![index].bounce!.id ?? ''),
                     ),
                   ),
                 );
@@ -53,7 +56,7 @@ class SwiperWidget extends StatelessWidget {
                   Radius.circular(ScreenUtil.L(7)),
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: "${images[index].img[0].url}",
+                  imageUrl: "${images?[index].img?[0].url}",
                   placeholder: (context, url) => ImageLoadingPage(),
                   fit: BoxFit.cover,
                 ),
@@ -61,7 +64,7 @@ class SwiperWidget extends StatelessWidget {
             ),
           ); //添加图片并设置图片样式
         },
-        itemCount: images != null ? images.length : 0,
+        itemCount: images != null ? images?.length ?? 0 : 0,
         pagination: SwiperPagination(
           alignment: Alignment.bottomRight,
           margin: EdgeInsets.only(

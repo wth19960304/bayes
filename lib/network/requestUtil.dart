@@ -244,7 +244,7 @@ class RequestMap {
 
   ///发布评论
   static PublishSubject<StringBean> commentInsert<BaseResponse>(
-    BaseIntercept baseIntercept,
+    BaseIntercept? baseIntercept,
     formData,
   ) {
     return HttpManager().post<StringBean>(

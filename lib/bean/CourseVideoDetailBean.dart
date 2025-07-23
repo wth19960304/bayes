@@ -166,14 +166,14 @@ class CourseVideos {
   final String? name;
   final String? time;
   final String? url;
-  final String? dislikeNum;
-  final String? likeNum;
+  late final String? dislikeNum;
+  late final String? likeNum;
   final String? shareNum;
-  final String? collectNum;
+  late final String? collectNum;
   final String? downloadNum;
-  final String? isLike;
-  final String? isDisLike;
-  final String? isCollect;
+  late final String? isLike;
+  late final String? isDisLike;
+  late final String? isCollect;
   final List<AboutVideolist>? aboutVideolist;
 
   CourseVideos({
