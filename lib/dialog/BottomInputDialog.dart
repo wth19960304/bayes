@@ -1,37 +1,35 @@
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/network/requestUtil.dart';
 import 'package:bayes/utils/screen_util.dart';
-
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class BottomInputDialog extends StatelessWidget {
-  TextEditingController controller =  TextEditingController();
+  TextEditingController controller = TextEditingController();
   int? id;
   int? parentId;
 
   //主题类型 0 : 吐槽评论  1：视频评论 2：试题评论 3：课程评论
   int type;
 
-  BottomInputDialog({super.key, this.id, this.parentId = 0, this.type = 0}) 
+  BottomInputDialog({super.key, this.id, this.parentId = 0, this.type = 0});
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: Colors.transparent,
-      body:  Column(
+      body: Column(
         children: <Widget>[
           Expanded(
-            child:  GestureDetector(
-              child:  Container(color: Colors.black38),
+            child: GestureDetector(
+              child: Container(color: Colors.black38),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
           ),
-           Container(
+          Container(
             height: ScreenUtil.L(40),
             color: KColorConstant.white,
             child: Wrap(
