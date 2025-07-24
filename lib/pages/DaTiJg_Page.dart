@@ -9,7 +9,7 @@ import 'package:bayes/network/requestUtil.dart';
 import 'package:bayes/utils/DateUtils.dart';
 // ignore: library_prefixes
 import 'package:bayes/utils/screen_util.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter_new_plus/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 ///答题界面
