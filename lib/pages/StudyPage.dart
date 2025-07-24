@@ -1,5 +1,6 @@
 import 'package:bayes/base/base_inner_widget.dart';
 import 'package:bayes/base/common_function.dart';
+import 'package:bayes/bean/StudyHomeBean.dart';
 import 'package:bayes/bean/TestHomeBean.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
@@ -17,10 +18,7 @@ import 'package:bayes/utils/screen_util.dart';
 import 'package:bayes/widget/SwiperWidget.dart';
 import 'package:bayes/widget/TypeWidget.dart';
 import 'package:bayes/widget/XuanzhetiWidget.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
-import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 ///学习
@@ -45,7 +43,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
   TextEditingController userController = TextEditingController();
   LoadingWidgetStatue pageStatue = LoadingWidgetStatue.LOADING;
   int currentPage = 0;
-  Data data;
+  late Data data;
 
   @override
   Widget buildWidget(BuildContext context) {
@@ -203,11 +201,11 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
 
   List<Widget> _setWidgets1() {
     List<Widget> widgets = [];
-    for (int i = 0; i < data.subjectManageList.length; i++) {
+    for (int i = 0; i < data.subjectManageList!.length; i++) {
       widgets.add(
         _warpItem(
-          "${data.subjectManageList[i].id}",
-          data.subjectManageList[i].subjectName,
+          "${data.subjectManageList?[i].id}",
+          data.subjectManageList![i].subjectName ?? '',
           1,
         ),
       );
@@ -274,7 +272,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
       (data) {
         setState(() {
           pageStatue = LoadingWidgetStatue.NONE;
-          this.data = data.data;
+          this.data = data.data!;
         });
       },
       onError: (err) {
@@ -460,7 +458,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
               Container(
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.only(left: ScreenUtil.L(12)),
-                child: Text("试题分科", style: KFontConstant.blackTextBig_bold()),
+                child: Text("试题分科", style: KFontConstant.blackTextBigBold()),
               ),
               _warpContent(_setWidgets1()),
               _listTitleWidget("热门试题"),
@@ -501,16 +499,16 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
 
   _kechengItems() {
     List<Widget> widgets = [];
-    for (int i = 0; i < data.courseManageList.length; i++) {
-      widgets.add(KechengItem(data: data.courseManageList[i]));
+    for (int i = 0; i < data.courseManageList!.length; i++) {
+      widgets.add(KechengItem(data: data.courseManageList![i]));
     }
     return widgets;
   }
 
   _videoItems() {
     List<Widget> widgets = [];
-    for (int i = 0; i < data.videoManageList.length; i++) {
-      widgets.add(VideoItem(data.videoManageList[i]));
+    for (int i = 0; i < data.videoManageList!.length; i++) {
+      widgets.add(VideoItem(data.videoManageList?[i]));
     }
     return widgets;
   }
