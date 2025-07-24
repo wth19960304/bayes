@@ -237,21 +237,39 @@ class CourseVideos {
 }
 
 class AboutVideolist {
-  final int? id;
-  final String? name;
-  final String? time;
+  int? id;
+  int? cvId;
+  int? cmId;
+  String? vmId;
+  String? name;
+  String? time;
 
-  AboutVideolist({this.id, this.name, this.time});
+  AboutVideolist({
+    this.id,
+    this.cvId,
+    this.vmId,
+    this.name,
+    this.time,
+    this.cmId,
+  });
 
-  factory AboutVideolist.fromJson(Map<String, dynamic> json) {
-    return AboutVideolist(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      time: json['time'] as String?,
-    );
+  AboutVideolist.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    cvId = int.parse(json['caId']);
+    cmId = json['cmId'];
+    vmId = json['vmId'];
+    name = json['name'];
+    time = json['time'];
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'name': name, 'time': time};
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['caId'] = cvId;
+    data['vmId'] = vmId;
+    data['name'] = name;
+    data['time'] = time;
+    data['caId'] = cvId;
+    return data;
   }
 }
