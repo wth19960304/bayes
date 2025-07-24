@@ -11,8 +11,6 @@ import '../../widget/image_loading.dart';
 class SwiperWidget1 extends StatelessWidget {
   List<CourseImg>? images;
 
-  SwiperWidget1({super.key,  this.images}) 
-
   @override
   Widget build(BuildContext context) {
     if (images == null || images!.isEmpty) {
@@ -26,21 +24,21 @@ class SwiperWidget1 extends StatelessWidget {
             onTap: () {},
             child: ClipRRect(
               child: CachedNetworkImage(
-                imageUrl: "${images[index].url}",
+                imageUrl: "${images?[index].url}",
                 placeholder: (context, url) => ImageLoadingPage(),
                 fit: BoxFit.cover,
               ),
             ),
           ); //添加图片并设置图片样式
         },
-        itemCount: images != null ? images?.length ?? 0: 0,
-        pagination: SwiperPagination(
-          alignment: Alignment.bottomRight,
-        ),
+        itemCount: images != null ? images?.length ?? 0 : 0,
+        pagination: SwiperPagination(alignment: Alignment.bottomRight),
         //显示的点
         indicatorLayout: PageIndicatorLayout.SCALE,
-        autoplay: true, //是否循环
+        autoplay: true, //是否循环s      ),
       ),
     );
   }
+
+  SwiperWidget1({super.key, this.images});
 }
