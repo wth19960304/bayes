@@ -2,8 +2,8 @@ import 'package:bayes/bean/StudyHomeBean.dart';
 import 'package:bayes/constant/font.dart';
 import 'package:bayes/study/KechengSearchPage.dart';
 import 'package:bayes/utils/screen_util.dart';
+import 'package:bayes/widget/image_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:flutter/material.dart';
 
 //分类布局
@@ -12,17 +12,36 @@ class TypeWidget extends StatelessWidget {
   List<SubjectManageList>? ctypeData;
   BuildContext? ct;
 
-  TypeWidget({super.key, this.ctypeData, this.ct})
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: ScreenUtil.L(25)),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.only(right: ScreenUtil.L(20)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _carShopItem(),
+        ),
+      ),
+    );
+  }
+
+  TypeWidget({super.key, this.ctypeData, this.ct});
 
   // ignore: empty_constructor_bodies
+
   Widget _gridViewItemUI(SubjectManageList context) {
     return InkWell(
       onTap: () {
-        Navigator.of(ct).push(MaterialPageRoute(
+        Navigator.of(ct!).push(
+          MaterialPageRoute(
             builder: (v) => KeChengSearchPage(
-                  id: "${context.id}",
-                  typeName: "${context.subjectName}",
-                )));
+              id: "${context.id}",
+              typeName: "${context.subjectName}",
+            ),
+          ),
+        );
       },
       child: Column(
         children: <Widget>[
@@ -31,18 +50,12 @@ class TypeWidget extends StatelessWidget {
             height: ScreenUtil.L(80),
             width: ScreenUtil.L(140),
             child: ClipRRect(
-              // ignore: sort_child_properties_last
+              borderRadius: BorderRadius.all(Radius.circular(ScreenUtil.L(5))),
               child: CachedNetworkImage(
-                imageUrl: "${context.img[0].url}",
-                placeholder: (context, url) => ImageLoadingPage(
-                  width: 20.0,
-                ),
-                errorWidget: (context, url, error) => ImageErrorPage(
-                  width: 20.0,
-                ),
+                imageUrl: context.img?[0].url ?? '',
+                placeholder: (context, url) => ImageLoadingPage(width: 20.0),
                 fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(ScreenUtil.L(5))),
             ),
           ),
           Container(
@@ -60,25 +73,10 @@ class TypeWidget extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: ScreenUtil.L(25)),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.only(right: ScreenUtil.L(20)),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: _carShopItem(),
-        ),
-      ),
-    );
-  }
-
   List<Widget> _carShopItem() {
-    List<Widget> listWidget = List();
-    for (var i = 0; i < ctypeData.length; i++) {
-      listWidget.add(_gridViewItemUI(ctypeData[i]));
+    List<Widget> listWidget = [];
+    for (var i = 0; i < ctypeData!.length; i++) {
+      listWidget.add(_gridViewItemUI(ctypeData![i]));
     }
     return listWidget;
   }
