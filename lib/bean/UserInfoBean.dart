@@ -1,7 +1,7 @@
 class UserInfoBean {
-  final int? state;
-  final String? message;
-  final UserInfoData? data;
+  int? state;
+  String? message;
+  UserInfoData? data;
 
   UserInfoBean({this.state, this.message, this.data});
 
@@ -19,28 +19,28 @@ class UserInfoBean {
 }
 
 class UserInfoData {
-  final int? id;
-  final String? phoneNum;
-  final String? password;
-  final String? nickname;
-  final List<HeadImg>? headImg;
-  late final String? sex;
-  late final String? grade;
-  late final String? userType;
-  late final String? division;
-  late final String? mathScores;
-  late final String? position;
-  final String? state;
-  final String? banReason;
-  final String? banStartTime;
-  final String? banEndTime;
-  final String? addTime;
-  final String? studyNum;
-  final String? testNum;
-  final String? cacheNum;
-  late final String? provincialId;
-  late final String? cityId;
-  late final String? areaId;
+  int? id;
+  String? phoneNum;
+  String? password;
+  String? nickname;
+  List<HeadImg>? headImg;
+  late String? sex;
+  late String? grade;
+  late String? userType;
+  late String? division;
+  late String? mathScores;
+  late String? position;
+  String? state;
+  String? banReason;
+  String? banStartTime;
+  String? banEndTime;
+  String? addTime;
+  String? studyNum;
+  String? testNum;
+  String? cacheNum;
+  late String? provincialId;
+  late String? cityId;
+  late String? areaId;
 
   UserInfoData({
     this.id,
@@ -125,8 +125,8 @@ class UserInfoData {
 }
 
 class HeadImg {
-  final String? name;
-  final String? url;
+  String? name;
+  String? url;
 
   HeadImg({this.name, this.url});
 
