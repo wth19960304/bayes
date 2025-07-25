@@ -572,7 +572,7 @@ class RequestMap {
 
   //获取省市区
   static PublishSubject<CityModel> getAreaListByParentId<BaseResponse>(
-    BaseIntercept baseIntercept, {
+    BaseIntercept? baseIntercept, {
     formData,
   }) {
     return HttpManager().post<CityModel>(
