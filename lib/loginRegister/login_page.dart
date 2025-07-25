@@ -373,7 +373,7 @@ class _LoginPageState extends BaseWidgetState<LoginPage> {
   }
 
   _loginSuncess(LoginBean da) {
-    SpUtils().setString(SpConstanst.USER_TOKEN, da.data!.token ?? "");
+    SpUtils().setString(SpConstanst.USER_TOKEN, da.data?.token ?? "");
     SpUtils().setString(SpConstanst.USER_PWD, pwdController.text);
     SpUtils().setString(SpConstanst.USER_NAME, userController.text);
     showToast("登录成功");
