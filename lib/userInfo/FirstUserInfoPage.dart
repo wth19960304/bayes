@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:bayes/base/base_widget.dart';
-import 'package:bayes/bean/CommentBean.dart';
+import 'package:bayes/base/common_function.dart';
+import 'package:bayes/bean/NianjiBean.dart';
 import 'package:bayes/bean/UserInfoBean.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/constant/font.dart';
+import 'package:bayes/dialog/cityselect_dialog.dart';
 import 'package:bayes/dialog/select_dialog.dart';
 import 'package:bayes/home/MainPage.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
@@ -35,14 +37,17 @@ class FirstUserInfoPage extends BaseWidget {
 
 class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
   TextEditingController txtController1 = TextEditingController();
-  late UserInfoData data;
+  // ignore: avoid_init_to_null
+  UserInfoData? data;
 
   @override
   Widget buildWidget(BuildContext context) {
     // ignore: unnecessary_null_comparison
-    // if (data == null) {
-    //   return baseStatueWidget(LoadingWidgetStatue.LOADING);
-    // }
+
+    // ignore: unnecessary_null_comparison
+    if (data == null) {
+      return baseStatueWidget(LoadingWidgetStatue.LOADING);
+    }
     return Stack(
       children: <Widget>[
         Image.asset(
@@ -74,7 +79,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
                           bottom: ScreenUtil.L(5),
                         ),
                         // ignore: prefer_is_empty
-                        child: data.headImg?.length == 0
+                        child: data?.headImg?.length == 0
                             ? Image.asset(
                                 "images/user_header.png",
                                 height: ScreenUtil.L(55),
@@ -88,7 +93,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
                                 child: CachedNetworkImage(
                                   height: ScreenUtil.L(55),
                                   width: ScreenUtil.L(55),
-                                  imageUrl: "${data.headImg?[0].url}",
+                                  imageUrl: "${data?.headImg?[0].url}",
                                   placeholder: (context, url) =>
                                       ImageLoadingPage(width: 20.0),
                                   errorWidget: (context, url, error) =>
@@ -148,51 +153,51 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
                     selectWidget(
                       tag: 1,
                       title: "请选择身份",
-                      selectString: data.userType!.length < 2
+                      selectString: (data?.userType!.length ?? 0) < 2
                           ? "请选择"
-                          : data.userType ?? "",
+                          : data?.userType ?? "",
                     ),
                     selectWidget(
                       tag: 2,
                       title: "性别",
-                      selectString: data.sex ?? "",
+                      selectString: data?.sex ?? "",
                     ),
                     Visibility(
-                      visible: data.userType != "老师",
+                      visible: data?.userType != "老师",
                       child: selectWidget(
                         tag: 3,
                         title: "年级",
-                        selectString: data.grade!.length < 2
+                        selectString: (data?.grade!.length ?? 0) < 2
                             ? "请选择"
-                            : data.grade ?? "",
+                            : data?.grade ?? "",
                       ),
                     ),
                     Visibility(
-                      visible: data.userType != "老师",
+                      visible: data?.userType != "老师",
                       child: selectWidget(
                         tag: 4,
                         title: "分科",
-                        selectString: data.division!.length < 2
+                        selectString: (data?.division!.length ?? 0) < 2
                             ? "请选择"
-                            : data.division ?? "",
+                            : data?.division ?? "",
                       ),
                     ),
                     Visibility(
-                      visible: data.userType != "老师",
+                      visible: data?.userType != "老师",
                       child: selectWidget(
                         tag: 5,
                         title: "数学成绩",
-                        selectString: data.mathScores!.length < 2
+                        selectString: (data?.mathScores!.length ?? 0) < 2
                             ? "请选择"
-                            : data.mathScores ?? "",
+                            : data?.mathScores ?? "",
                       ),
                     ),
                     selectWidget(
                       tag: 6,
                       title: "学校地区",
-                      selectString: data.position!.length < 2
+                      selectString: (data?.position!.length ?? 0) < 2
                           ? "请选择"
-                          : data.position ?? "",
+                          : data?.position ?? "",
                     ),
                     Container(
                       margin: EdgeInsets.only(
@@ -224,7 +229,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
           builder: (BuildContext context) {
             int index = -1;
             for (int i = 0; i < type.length; i++) {
-              if (type[i] == data.userType) {
+              if (type[i] == data?.userType) {
                 index = i;
               }
             }
@@ -233,7 +238,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
         ).then((value) {
           if (value != null) {
             setState(() {
-              data.userType = type[value];
+              data?.userType = type[value];
             });
           }
         });
@@ -244,7 +249,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
           barrierDismissible: true,
           builder: (BuildContext context) {
             return SelectDialog(
-              data.sex == "男" ? 0 : (data.sex == "女" ? 1 : -1),
+              data?.sex == "男" ? 0 : (data?.sex == "女" ? 1 : -1),
               ["男", "女"],
               "设置性别",
             );
@@ -252,7 +257,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
         ).then((value) {
           if (value != null) {
             setState(() {
-              data.sex = value == 0 ? "男" : "女";
+              data?.sex = value == 0 ? "男" : "女";
             });
           }
         });
@@ -272,7 +277,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
         ).then((value) {
           if (value != null) {
             setState(() {
-              data.grade = type[value];
+              data?.grade = type[value];
             });
           }
         });
@@ -289,7 +294,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
         ).then((value) {
           if (value != null) {
             setState(() {
-              data.division = type[value];
+              data?.division = type[value];
             });
           }
         });
@@ -322,7 +327,7 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
         ).then((value) {
           if (value != null) {
             setState(() {
-              data.mathScores = type[value];
+              data?.mathScores = type[value];
             });
           }
         });
@@ -405,8 +410,8 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
           //更改头像
           setState(() {
             HeadImg ima = HeadImg(name: da.data?[0].name, url: da.data?[0].url);
-            data.headImg?.clear();
-            data.headImg?.add(ima);
+            data?.headImg?.clear();
+            data?.headImg?.add(ima);
           });
         },
         onError: (err) {
@@ -421,19 +426,18 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Text("wth");
-        // CitySelectDialog();
+        return CitySelectDialog();
       },
     ).then((value) {
       //处理弹窗返回的参数
       if (value == null) {
         return;
       }
-      data.provincialId = value['sheng'];
-      data.cityId = value['shi'];
-      data.areaId = value['qu'];
+      data?.provincialId = value['sheng'];
+      data?.cityId = value['shi'];
+      data?.areaId = value['qu'];
       setState(() {
-        data.position = value['name'];
+        data?.position = value['name'];
       });
     });
   }
@@ -495,34 +499,34 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
       showToast("请输入昵称");
       return;
     }
-    if (data.position == "") {
+    if (data?.position == "") {
       showToast("请选择学校地区");
       return;
     }
-    if (data.userType == "") {
+    if (data?.userType == "") {
       showToast("请选择身份");
       return;
     }
 
     String content = "[";
-    for (int i = 0; i < data.headImg!.length; i++) {
+    for (int i = 0; i < (data?.headImg!.length ?? 0); i++) {
       content +=
-          "{\"name\":\"${data.headImg?[i].name}\",\"url\":\"${data.headImg?[i].url}\"}";
-      if (i != data.headImg!.length - 1) {
+          "{\"name\":\"${data?.headImg?[i].name}\",\"url\":\"${data?.headImg?[i].url}\"}";
+      if (i != data!.headImg!.length - 1) {
         content += ",";
       }
     }
     content += "]";
-    if (data.userType != "老师") {
-      if (data.grade == "") {
+    if (data?.userType != "老师") {
+      if (data?.grade == "") {
         showToast("请选择年级");
         return;
       }
-      if (data.division == "") {
+      if (data?.division == "") {
         showToast("请选择分科");
         return;
       }
-      if (data.mathScores == "") {
+      if (data?.mathScores == "") {
         showToast("请选择数学成绩");
         return;
       }
@@ -532,19 +536,19 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
 
     Map<String, dynamic> map = {
       "nickname": txtController1.text,
-      "sex": "${data.sex}",
+      "sex": "${data?.sex}",
       "headImg": content,
-      "grade": "${data.grade}",
-      "userType": "${data.userType}",
-      "division": "${data.division}",
-      "mathScores": "${data.mathScores}",
-      "provincialName": data.position?.split(" ")[0],
-      "cityName": data.position?.split(" ")[1],
-      "areaName": data.position?.split(" ")[2],
-      "position": "${data.position}", //地区
-      "provincialId": "${data.provincialId}",
-      "cityId": "${data.cityId}",
-      "areaId": "${data.areaId}",
+      "grade": "${data?.grade}",
+      "userType": "${data?.userType}",
+      "division": "${data?.division}",
+      "mathScores": "${data?.mathScores}",
+      "provincialName": data?.position?.split(" ")[0],
+      "cityName": data?.position?.split(" ")[1],
+      "areaName": data?.position?.split(" ")[2],
+      "position": "${data?.position}", //地区
+      "provincialId": "${data?.provincialId}",
+      "cityId": "${data?.cityId}",
+      "areaId": "${data?.areaId}",
     };
     print(map.toString());
     RequestMap.insertUserInfo(ShowLoadingIntercept(this), map).listen(
