@@ -3,6 +3,7 @@ import 'package:bayes/base/base_widget.dart';
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
+import 'package:bayes/pages/MinePage.dart';
 import 'package:bayes/pages/StudyPage.dart';
 import 'package:bayes/widget/bottombar.dart';
 import 'package:flutter/foundation.dart';
@@ -33,10 +34,7 @@ class _MainPageState extends BaseWidgetState<MainPage> {
   @override
   Widget buildWidget(BuildContext context) {
     /// 初始化页面widget列表
-    widgets = [
-      StudyPage(),
-      // MinePage()
-    ];
+    widgets = [StudyPage(), MinePage()];
 
     /// 返回主界面的Scaffold结构
     return Scaffold(
