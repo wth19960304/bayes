@@ -22,46 +22,68 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 ///学习
+/// 学习页面，包含课程点播和刷题功能
 // ignore: must_be_immutable
 class StudyPage extends BaseInnerWidget {
+  /// 构造函数，接受父类的 key
   StudyPage({super.key});
 
+  /// 设置索引，返回一个整数
   @override
   int setIndex() {
-    // TODO: implement setIndex
     return 0;
   }
 
+  /// 获取页面状态对象
   @override
   BaseInnerWidgetState<BaseInnerWidget> getState() {
-    // TODO: implement getState
     return _StudyPageState();
   }
 }
 
+/// 学习页面的状态类，管理页面的生命周期和交互
 class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
+  /// 文本输入控制器，用于管理输入框的状态
   TextEditingController userController = TextEditingController();
+
+  /// 页面状态，用于显示加载、错误等状态
   LoadingWidgetStatue pageStatue = LoadingWidgetStatue.LOADING;
+
+  /// 当前显示的页面索引，0 表示课程点播，1 表示刷题
   int currentPage = 0;
+
+  /// 用户数据对象，存储页面所需的数据
   late Data data;
 
+  // ignore: unused_field
+  final PageController _pageController = PageController();
+
+  /// 构建页面 widget
   @override
   Widget buildWidget(BuildContext context) {
+    /// 如果页面状态不是 NONE，显示对应的状态组件
     if (pageStatue != LoadingWidgetStatue.NONE) {
       return baseStatueWidget(pageStatue);
     } else {
+      /// 显示页面内容，根据 currentPage 切换课程点播或刷题布局
       return Column(
         children: <Widget>[
           _topSelect(),
+          // Expanded(
+          //   child: currentPage == 0 ? _kechengWidget() : _shuatiWidget(),
+          // ),
           Expanded(
-            child: currentPage == 0 ? _kechengWidget() : _shuatiWidget(),
+            child: IndexedStack(
+              index: currentPage,
+              children: [_kechengWidget(), _shuatiWidget()],
+            ),
           ),
         ],
       );
     }
   }
 
-  //课程点播与刷题的界面切换
+  /// 创建顶部的切换按钮组件
   Widget _topSelect() {
     return Container(
       width: ScreenUtil.screenWidth,
@@ -73,6 +95,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              /// 课程点播按钮
               InkWell(
                 onTap: () {
                   if (currentPage == 0) return;
@@ -94,6 +117,8 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
                   ),
                 ),
               ),
+
+              /// 刷题按钮
               InkWell(
                 onTap: () {
                   if (currentPage == 1) return;
@@ -117,21 +142,12 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
               ),
             ],
           ),
-          //          Container(
-          //            color: KColorConstant.themeColor,
-          //            width: ScreenUtil.L(40),
-          //            margin: EdgeInsets.only(
-          //              left: currentPage == 0 ? ScreenUtil.L(11) : ScreenUtil.L(92),
-          //              top: ScreenUtil.L(5),
-          //            ),
-          //            height: 3,
-          //          )
         ],
       ),
     );
   }
 
-  ///导航栏 appBar 可以重写
+  /// 自定义导航栏
   @override
   Widget getAppBar() {
     return Container(
@@ -142,6 +158,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          /// 搜索按钮
           InkWell(
             onTap: () {
               Navigator.push(
@@ -179,6 +196,8 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
               ),
             ),
           ),
+
+          /// 消息按钮
           InkWell(
             onTap: () {
               Navigator.push(
@@ -199,6 +218,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     );
   }
 
+  /// 生成科目管理列表的 widget
   List<Widget> _setWidgets1() {
     List<Widget> widgets = [];
     for (int i = 0; i < data.subjectManageList!.length; i++) {
@@ -213,6 +233,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     return widgets;
   }
 
+  /// 包装科目管理列表的 widget
   _warpContent(List<Widget> widgets) {
     return Container(
       width: ScreenUtil.screenWidth,
@@ -231,6 +252,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     );
   }
 
+  /// 创建科目项的 widget
   _warpItem(String id, String content, int type) {
     bool isSelect = false;
     return InkWell(
@@ -260,9 +282,10 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     );
   }
 
-  late List<TestManageList> testHomeData;
+  /// 试题管理数据列表
+  List<TestManageList>? testHomeData;
 
-  //获取首页数据
+  /// 获取首页数据
   _getHomeData() {
     var formData = {"page": "1"};
     RequestMap.StudyHome(
@@ -283,7 +306,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
       },
     );
 
-    ///获取试题列表
+    /// 获取试题列表
     RequestMap.getTestHome(
       ShowLoadingIntercept(this, isInit: true),
       formData,
@@ -294,23 +317,28 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     }, onError: (err) {});
   }
 
+  /// 页面创建时调用，初始化数据
   @override
   void onCreate() {
     setAppBarVisible(true);
     _getHomeData();
   }
 
+  /// 点击错误组件时调用，重新获取数据
   @override
   void onClickErrorWidget() {
     _getHomeData();
   }
 
+  /// 页面暂停时调用
   @override
   void onPause() {}
 
+  /// 页面恢复时调用
   @override
   void onResume() {}
 
+  /// 计算垂直边距
   @override
   double getVerticalMargin() {
     return ScreenUtil.L(50) +
@@ -318,9 +346,10 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
         (ScreenUtil.bottomBarHeight ?? 0);
   }
 
+  /// 课程数据
   Null kechengData;
 
-  ///课程点播
+  /// 课程点播页面布局
   Widget _kechengWidget() {
     return Container(
       color: KColorConstant.appBgColor,
@@ -378,7 +407,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     );
   }
 
-  ///我要刷题
+  /// 我要刷题页面布局
   Widget _shuatiWidget() {
     return Container(
       color: KColorConstant.appBgColor,
@@ -387,9 +416,6 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
         onRefresh: () async {
           await _getHomeData();
         },
-        //        loadMore: () async {
-        ////          await _getHomeData();
-        //        },
         header: ClassicalHeader(
           refreshText: '下拉刷新',
           refreshReadyText: '释放刷新',
@@ -471,23 +497,25 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     );
   }
 
+  /// 生成试题项的 widget
   _shitiItems() {
-    if (testHomeData.isEmpty) {
+    // ignore: prefer_is_empty
+    if (testHomeData == null || testHomeData?.length == 0) {
       return baseStatueWidget(LoadingWidgetStatue.DATAEMPTY);
     }
     List<Widget> widgets = [];
-    for (int i = 0; i < testHomeData.length; i++) {
+    for (int i = 0; i < testHomeData!.length; i++) {
       widgets.add(
         InkWell(
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => XuanzhetiWidget("${testHomeData[i].id}"),
+                builder: (context) => XuanzhetiWidget("${testHomeData?[i].id}"),
               ),
             );
           },
-          child: ShitiItem(data: testHomeData[i]),
+          child: ShitiItem(data: testHomeData?[i]),
         ),
       );
     }
@@ -497,6 +525,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     );
   }
 
+  /// 生成课程项的 widget
   _kechengItems() {
     List<Widget> widgets = [];
     for (int i = 0; i < data.courseManageList!.length; i++) {
@@ -505,6 +534,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     return widgets;
   }
 
+  /// 生成视频项的 widget
   _videoItems() {
     List<Widget> widgets = [];
     for (int i = 0; i < data.videoManageList!.length; i++) {
@@ -513,29 +543,14 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
     return widgets;
   }
 
-  ///list标题布局
+  /// 创建列表标题组件
   Widget _listTitleWidget(String title) {
     return Container(
       margin: EdgeInsets.all(ScreenUtil.L(10)),
       padding: EdgeInsets.only(left: ScreenUtil.L(3)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(title, style: KFontConstant.blackTextBig()),
-          //          Row(
-          //            children: <Widget>[
-          //              Text("更多"),
-          //              Container(
-          //                padding: EdgeInsets.only(
-          //                    right: ScreenUtil.L(5), left: ScreenUtil.L(2)),
-          //                child: Image.asset(
-          //                  "images/right_go.png",
-          //                  width: ScreenUtil.L(10),
-          //                ),
-          //              )
-          //            ],
-          //          )
-        ],
+        children: <Widget>[Text(title, style: KFontConstant.blackTextBig())],
       ),
     );
   }
