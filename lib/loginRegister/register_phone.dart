@@ -102,8 +102,6 @@ class _RegisterPhonePageState extends BaseWidgetState<RegisterPhonePage> {
 
     RequestMap.sendCode(ShowLoadingIntercept(this), formData).listen(
       (da) {
-        print("1111111111111");
-        print(da);
         Navigator.of(context).pop();
         //前往注册界面
         Navigator.push(
