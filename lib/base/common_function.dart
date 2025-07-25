@@ -93,15 +93,16 @@ abstract mixin class BaseFunction {
     if (floatingShow == false) {
       return null;
     } else {
-      return Container(
-        margin: EdgeInsets.only(bottom: ScreenUtil.L(50)),
-        child: FloatingActionButton(
-          child: Text("吐槽", style: KFontConstant.whiteTextBig()),
-          onPressed: () {
-            goTucao();
-          },
-        ),
-      );
+      // return Container(
+      //   margin: EdgeInsets.only(bottom: ScreenUtil.L(50)),
+      //   child: FloatingActionButton(
+      //     child: Text("吐槽", style: KFontConstant.whiteTextBig()),
+      //     onPressed: () {
+      //       goTucao();
+      //     },
+      //   ),
+      // );
+      return null;
     }
   }
 
