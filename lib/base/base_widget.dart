@@ -3,7 +3,7 @@ import 'package:bayes/base/navigator_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// 所有页面的基类，继承自StatefulWidget
+/// 所有页面的基类，继承自 StatefulWidget
 /// 提供统一的页面生命周期管理和导航控制
 // ignore: must_be_immutable
 abstract class BaseWidget extends StatefulWidget {
@@ -21,7 +21,7 @@ abstract class BaseWidget extends StatefulWidget {
 }
 
 /// 页面状态基类，管理页面生命周期和状态
-/// [T] 泛型参数，必须是BaseWidget的子类
+/// [T] 泛型参数，必须是 BaseWidget 的子类
 abstract class BaseWidgetState<T extends BaseWidget> extends State<T>
     with WidgetsBindingObserver, BaseFunction {
   bool _onResumed = false; // 标记页面是否已显示
@@ -65,7 +65,7 @@ abstract class BaseWidgetState<T extends BaseWidget> extends State<T>
 
   @override
   Widget build(BuildContext context) {
-    // 初次加载时触发onResume
+    // 初次加载时触发 onResume
     if (!_onResumed) {
       if (NavigatorManger().isTopPage(this)) {
         _onResumed = true;
@@ -73,7 +73,7 @@ abstract class BaseWidgetState<T extends BaseWidget> extends State<T>
       }
     }
 
-    // 特殊处理LoginPage和MainPage的返回按钮逻辑
+    // 特殊处理 LoginPage 和 MainPage 的返回按钮逻辑
     if (getClassName() == "LoginPage" || getClassName() == "MainPage") {
       return PopScope(
         canPop: true,
