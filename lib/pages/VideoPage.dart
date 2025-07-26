@@ -20,7 +20,7 @@ import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 ///视频播放
 // ignost_be_immutable
@@ -493,7 +493,7 @@ class _VideoPageState extends BaseWidgetState<VideoPage> {
   void onCreate() {
     setAppBarVisible(true);
     setTopBarVisible(true);
-    Wakelock.enable();
+    WakelockPlus.enable();
     SpConstanst().setVideoSpeed(1.0);
     setAppBarTitle("视频播放");
     _getDataPath();
@@ -503,7 +503,7 @@ class _VideoPageState extends BaseWidgetState<VideoPage> {
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     player.release();
     super.dispose();
   }

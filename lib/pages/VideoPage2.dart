@@ -22,7 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 ///课程视频播放
 // ignore: must_be_immutable
@@ -528,7 +528,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
   void onCreate() {
     setAppBarVisible(true);
     setTopBarVisible(true);
-    Wakelock.enable();
+    WakelockPlus.enable();
     setAppBarTitle("课程视频");
     SpConstanst().setVideoSpeed(1.0);
     _getDataPath();
@@ -739,7 +739,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
   @override
   void dispose() {
     super.dispose();
-    Wakelock.disable();
+    WakelockPlus.disable();
 
     player.release();
   }
