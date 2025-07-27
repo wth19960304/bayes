@@ -153,14 +153,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.4"
-  fijkplayer:
+  fijkplayer_plus:
     dependency: "direct main"
     description:
-      name: fijkplayer
-      sha256: e6098034e696ce448f5f289fb5b3fa363df5e606bdb418d52944c1dcb8e14cba
+      name: fijkplayer_plus
+      sha256: dab2422138cdb8533fe505e1e6401339fb1021c9d12c958ad39eb938f73c0924
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.11.0"
+    version: "0.0.1"
   file:
     dependency: transitive
     description:
@@ -206,14 +206,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.0.0"
-  flutter_native_image:
-    dependency: "direct main"
-    description:
-      name: flutter_native_image
-      sha256: "0ff23d6222064259df8f85ea56925627ea1ec8658814672c5b6c23fc9174c65e"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.6+1"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -252,10 +244,10 @@ packages:
     dependency: "direct main"
     description:
       name: fluwx
-      sha256: "61e572248c38a775ad44731e2ec7c4b52cae673eda58222b5432ed721205471c"
+      sha256: "9db31d54043363c9c8283b5f0bc4df982edb45ba19d800df9d7de96a205371ae"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.6.0"
+    version: "5.7.0"
   foundation:
     dependency: "direct main"
     description:

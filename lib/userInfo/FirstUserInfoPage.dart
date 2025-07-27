@@ -19,7 +19,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
+// import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 ///用户资料完善
@@ -387,39 +387,39 @@ class _FirstUserInfoPageState extends BaseWidgetState<FirstUserInfoPage> {
   int maxImageSize = 3;
 
   ///修改头像
-  _setOneImage(File imageFile) {
-    FlutterNativeImage.compressImage(
-      imageFile.path,
-      quality: 70,
-      percentage: 50,
-    ).then((file) async {
-      imageFile.path.substring(
-        imageFile.path.lastIndexOf("/") + 1,
-        imageFile.path.length,
-      );
-      var formData = {
-        "file": await MultipartFile.fromFile(
-          imageFile.path,
-          filename:
-              "${SpUtils().getString(SpConstanst.USER_ID)}${DateTime.now().microsecondsSinceEpoch}",
-        ),
-      };
-      //上传单张图片
-      RequestMap.resourcesSaves(ShowLoadingIntercept(this), formData).listen(
-        (da) {
-          //更改头像
-          setState(() {
-            HeadImg ima = HeadImg(name: da.data?[0].name, url: da.data?[0].url);
-            data?.headImg?.clear();
-            data?.headImg?.add(ima);
-          });
-        },
-        onError: (err) {
-          print(err.message);
-        },
-      );
-    });
-  }
+  // _setOneImage(File imageFile) {
+  //   FlutterNativeImage.compressImage(
+  //     imageFile.path,
+  //     quality: 70,
+  //     percentage: 50,
+  //   ).then((file) async {
+  //     imageFile.path.substring(
+  //       imageFile.path.lastIndexOf("/") + 1,
+  //       imageFile.path.length,
+  //     );
+  //     var formData = {
+  //       "file": await MultipartFile.fromFile(
+  //         imageFile.path,
+  //         filename:
+  //             "${SpUtils().getString(SpConstanst.USER_ID)}${DateTime.now().microsecondsSinceEpoch}",
+  //       ),
+  //     };
+  //     //上传单张图片
+  //     RequestMap.resourcesSaves(ShowLoadingIntercept(this), formData).listen(
+  //       (da) {
+  //         //更改头像
+  //         setState(() {
+  //           HeadImg ima = HeadImg(name: da.data?[0].name, url: da.data?[0].url);
+  //           data?.headImg?.clear();
+  //           data?.headImg?.add(ima);
+  //         });
+  //       },
+  //       onError: (err) {
+  //         print(err.message);
+  //       },
+  //     );
+  //   });
+  // }
 
   show() async {
     //启动底部弹窗

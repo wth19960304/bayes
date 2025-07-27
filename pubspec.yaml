@@ -11,30 +11,29 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  shared_preferences: ^2.3.1
   flutter_screenutil: ^5.0.1
   fluttertoast: ^8.0.8
   fluwx: ^5.6.0
   tencent_kit: ^6.2.0
-  permission_handler: ^12.0.0
+  permission_handler: ^12.0.1
   rxdart: ^0.28.0
   dio: ^5.8.0+1
-  cached_network_image: ^3.4.1
   #地区选择控件
   city_pickers: ^1.3.0
   photo_manager: ^3.7.1
-  flutter_native_image: ^0.0.6+1
   foundation: ^0.0.5
   flutter_easyrefresh: ^2.2.2
   flutter_swiper_null_safety: ^1.0.2
   charts_flutter_new_plus: ^0.0.4
   intl: ^0.17.0
   photo_view: ^0.15.0
-  fijkplayer: ^0.11.0
-  #文件储存
+  fijkplayer_plus: ^0.0.1
+  # flutter_native_image: ^0.0.6+1
+
   path_provider: ^2.1.5
-  #屏幕常亮
   wakelock_plus: ^1.3.2
+  cached_network_image: ^3.4.1
+  shared_preferences: ^2.3.1
 
 dev_dependencies:
   flutter_test:

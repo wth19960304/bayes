@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:bayes/constant/color.dart';
 import 'package:bayes/utils/sp_constant.dart';
-import 'package:fijkplayer/fijkplayer.dart';
+import 'package:fijkplayer_plus/fijkplayer_plus.dart';
+
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
