@@ -383,6 +383,7 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              // 轮播图
               SwiperWidget(images: data.bannerManageList),
               TypeWidget(ctypeData: data.subjectManageList, ct: context),
               _listTitleWidget("热门课程"),
