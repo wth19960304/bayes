@@ -16,7 +16,6 @@ import 'package:bayes/utils/sp_constant.dart';
 import 'package:bayes/widget/CommentItem.dart';
 import 'package:dio/dio.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -183,7 +182,7 @@ class _VideoPageState extends BaseWidgetState<VideoPage> {
     Directory directory = Directory('$sDCardDir/videoBys');
     filePaths.clear();
     directory.listSync().forEach((file) {
-      print("" + file.path);
+      print(file.path);
       filePaths.add(file.path);
     });
     setState(() {});
@@ -213,7 +212,7 @@ class _VideoPageState extends BaseWidgetState<VideoPage> {
     double? width = ScreenUtil.screenWidth;
     double height = ScreenUtil.screenWidth! / 16 * 9;
 
-    return Container(
+    return SizedBox(
       width: width,
       height: height,
       child: FijkView(
@@ -407,10 +406,10 @@ class _VideoPageState extends BaseWidgetState<VideoPage> {
     if (sDCardDir == "")
       sDCardDir = (await getExternalStorageDirectory())!.path;
 
-    var savePath = sDCardDir + "/videoBys/$name";
-    File f = File(sDCardDir + "/videoBys");
+    var savePath = "$sDCardDir/videoBys/$name";
+    File f = File("$sDCardDir/videoBys");
     if (!await f.exists()) {
-      new Directory(sDCardDir + "/videoBys").createSync();
+      Directory("$sDCardDir/videoBys").createSync();
     }
 
     ///创建DIO
@@ -426,7 +425,7 @@ class _VideoPageState extends BaseWidgetState<VideoPage> {
           onReceiveProgress: (received, total) {
             if (total != -1) {
               ///当前下载的百分比例
-              print((received / total * 100).toStringAsFixed(0) + "%");
+              print("${(received / total * 100).toStringAsFixed(0)}%");
               // CircularProgressIndicator(value: currentProgress,) 进度 0-1
             }
           },
@@ -474,6 +473,7 @@ class _VideoPageState extends BaseWidgetState<VideoPage> {
     for (int i = 0; i < listContent.length; i++) {
       widgets.add(CommentItem(content: listContent[i]));
     }
+
     return Wrap(children: widgets);
   }
 
