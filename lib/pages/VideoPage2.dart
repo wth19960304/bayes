@@ -18,7 +18,6 @@ import 'package:bayes/utils/sp_constant.dart';
 import 'package:bayes/widget/CommentItem.dart';
 import 'package:dio/dio.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -531,6 +530,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
     setTopBarVisible(true);
     WakelockPlus.enable();
     setAppBarTitle("课程视频");
+
     SpConstanst().setVideoSpeed(1.0);
     _getDataPath();
     _getVideoManage();
