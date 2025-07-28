@@ -4,15 +4,14 @@
 import 'package:intl/intl.dart';
 
 class DateUtil {
-  // 工厂模式
-  factory DateUtil() => _getInstance();
+  // 私有构造函数
+  DateUtil._internal();
 
-  static DateUtil get instance => _getInstance();
-  static final DateUtil _instance = DateUtil();
+  // 静态单例实例
+  static final DateUtil _instance = DateUtil._internal();
 
-  static DateUtil _getInstance() {
-    return _instance;
-  }
+  // 静态getter
+  static DateUtil get instance => _instance;
 
   ///将时间日期格式转化为时间戳
   ///2018年12月11日
