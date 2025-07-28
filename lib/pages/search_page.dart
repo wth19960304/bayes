@@ -148,7 +148,8 @@ class _SearchPageState extends BaseWidgetState<SearchPage> {
 
   @override
   void onCreate() {
-    searchList = SpUtils().getString(SpConstanst.SEARCH_LIST)!.split("&&&");
+    searchList =
+        SpUtils().getString(SpConstanst.SEARCH_LIST)?.split("&&&") ?? [];
     searchList.remove("");
     if (searchList.isEmpty) {
       statue = LoadingWidgetStatue.DATAEMPTY;
