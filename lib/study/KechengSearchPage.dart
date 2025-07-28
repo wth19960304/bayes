@@ -27,7 +27,7 @@ class KeChengSearchPage extends BaseWidget {
 }
 
 class _GoodsListPageState extends BaseWidgetState<KeChengSearchPage> {
-  late TextEditingController editingController;
+  TextEditingController? editingController;
 
   late double deviceWidth;
 
@@ -208,7 +208,7 @@ class _GoodsListPageState extends BaseWidgetState<KeChengSearchPage> {
       "thematic": "", //专题
       "courseLabel": "", //标签
       "courseName": editingController != null
-          ? editingController.text
+          ? editingController?.text
           : "", //搜索内容
     };
     RequestMap.getListCourseManage(
@@ -252,7 +252,7 @@ class _GoodsListPageState extends BaseWidgetState<KeChengSearchPage> {
 
   @override
   void dispose() {
-    editingController.dispose();
+    editingController?.dispose();
     super.dispose();
   }
 }
