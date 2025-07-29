@@ -24,14 +24,14 @@ class VideoData {
   final String? url;
   final String? time;
   final String? studyNum;
-  late final String? dislikeNum;
-  late final String? likeNum;
+  late String? dislikeNum;
+  late String? likeNum;
   final String? shareNum;
-  late final String? collectNum;
+  late String? collectNum;
   final String? playNum;
-  late final String? isLike;
-  late final String? isDisLike;
-  late final String? isCollect;
+  late String? isLike;
+  late String? isDisLike;
+  late String? isCollect;
   final String? addTime;
   final String? downloadNum;
 
