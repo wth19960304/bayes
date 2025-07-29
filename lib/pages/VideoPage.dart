@@ -248,7 +248,7 @@ class _VideoPageState extends BaseWidgetState<VideoPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           _jiaohuItem(
-            data.data!.likeNum,
+            data.data?.likeNum,
             data.data?.isLike == "1"
                 ? "images/dianzhan_true.png"
                 : "images/dianzhan_false.png",
