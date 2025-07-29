@@ -36,16 +36,16 @@ class TestData {
   final List<AboutVideos>? aboutVideos;
   final List<TestOptionsList>? testOptionsList;
   final List<TestAnswersList>? testAnswersList;
-  late final String? dislikeNum;
-  late final String? likeNum;
+  late String? dislikeNum;
+  late String? likeNum;
   final String? shareNum;
-  late final String? collectNum;
+  late String? collectNum;
   final String? commentNum;
   final String? correctRate;
   final String? answerNum;
-  late final String? isLike;
-  late final String? isDisLike;
-  late final String? isCollect;
+  late String? isLike;
+  late String? isDisLike;
+  late String? isCollect;
 
   TestData({
     this.id,
