@@ -388,19 +388,19 @@ class _StudyPageState extends BaseInnerWidgetState<StudyPage> {
               TypeWidget(ctypeData: data.subjectManageList, ct: context),
               _listTitleWidget("热门课程"),
               Wrap(children: _kechengItems()),
-              _listTitleWidget("热门视频"),
-              Container(
-                margin: EdgeInsets.only(
-                  left: ScreenUtil.L(10),
-                  bottom: ScreenUtil.L(30),
-                ),
-                child: Wrap(
-                  children: _videoItems(),
-                  spacing: ScreenUtil.L(10),
-                  runSpacing: ScreenUtil.L(12),
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                ),
-              ),
+              // _listTitleWidget("热门视频"),
+              // Container(
+              //   margin: EdgeInsets.only(
+              //     left: ScreenUtil.L(10),
+              //     bottom: ScreenUtil.L(30),
+              //   ),
+              //   child: Wrap(
+              //     children: _videoItems(),
+              //     spacing: ScreenUtil.L(10),
+              //     runSpacing: ScreenUtil.L(12),
+              //     crossAxisAlignment: WrapCrossAlignment.start,
+              //   ),
+              // ),
             ],
           ),
         ),
