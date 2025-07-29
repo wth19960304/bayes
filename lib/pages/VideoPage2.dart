@@ -131,14 +131,14 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
         this.data = data.data!;
 
         for (int i = 0; i < (data.data?.courseVideos?.length ?? 0); i++) {
-          if (widget.videoId == data.data!.courseVideos?[i].id) {
+          if (widget.videoId == data.data?.courseVideos?[i].id) {
             selectIndex = i;
           }
         }
-        playUrl = data.data!.courseVideos?[selectIndex].url ?? '';
+        playUrl = data.data?.courseVideos?[selectIndex].url ?? '';
         _setPlaySource(
           playUrl,
-          data.data!.courseVideos![selectIndex].name ?? '',
+          data.data?.courseVideos![selectIndex].name ?? '',
         );
         setState(() {});
         _getCommentList();
@@ -337,7 +337,8 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
 
   start(String name, String url) async {
     if (sDCardDir == "")
-      sDCardDir = (await getExternalStorageDirectory())!.path;
+      // ignore: curly_braces_in_flow_control_structures
+      sDCardDir = (await getExternalStorageDirectory())?.path ?? '';
     var savePath = "$sDCardDir/videoBys/$name";
     File f = File("$sDCardDir/videoBys");
     if (!await f.exists()) {
@@ -414,21 +415,21 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
             },
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(bottom: ScreenUtil.L(50)),
-          width: ScreenUtil.L(50),
-          height: ScreenUtil.L(50),
-          alignment: Alignment.center,
-          decoration: KBoxStyle.nextBtn(),
-          child: InkWell(
-            child: Text("吐槽", style: KFontConstant.whiteTextBig()),
-            onTap: () {
-              player.pause();
-              //前往发布吐槽
-              goTucao();
-            },
-          ),
-        ),
+        // Container(
+        //   margin: EdgeInsets.only(bottom: ScreenUtil.L(50)),
+        //   width: ScreenUtil.L(50),
+        //   height: ScreenUtil.L(50),
+        //   alignment: Alignment.center,
+        //   decoration: KBoxStyle.nextBtn(),
+        //   child: InkWell(
+        //     child: Text("吐槽", style: KFontConstant.whiteTextBig()),
+        //     onTap: () {
+        //       player.pause();
+        //       //前往发布吐槽
+        //       goTucao();
+        //     },
+        //   ),
+        // ),
       ],
     );
   }
@@ -455,7 +456,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
       ).listen((data) {}, onError: (err) {});
   }
 
-  late List<CommentContent> listContent;
+  List<CommentContent>? listContent;
 
   ///获取视频评论列表
   _getCommentList() {
@@ -471,7 +472,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
       formData,
     ).listen((data) {
       setState(() {
-        listContent = data.data!.content!;
+        listContent = data.data?.content;
       });
     }, onError: (err) {});
   }
@@ -500,12 +501,12 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
 
   //评论的布局
   _pinglunContent() {
-    if (listContent.isEmpty) {
+    if (listContent?.isEmpty ?? false) {
       return baseStatueWidget(LoadingWidgetStatue.DATAEMPTY);
     }
     List<Widget> widgets = [];
-    for (int i = 0; i < listContent.length; i++) {
-      widgets.add(CommentItem(content: listContent[i]));
+    for (int i = 0; i < (listContent?.length ?? 0); i++) {
+      widgets.add(CommentItem(content: listContent?[i]));
     }
     return Wrap(children: widgets);
   }
@@ -577,7 +578,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
 
   List<Widget> _videosList() {
     List<Widget> listWidget = [];
-    for (var i = 0; i < data.courseVideos!.length; i++) {
+    for (var i = 0; i < (data.courseVideos?.length ?? 0); i++) {
       listWidget.add(_videoItemUI(i));
     }
     return listWidget;
@@ -625,7 +626,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
 
   _getDataPath() async {
     // 打印出test文件夹下文件的路径
-    sDCardDir = (await getExternalStorageDirectory())!.path;
+    sDCardDir = (await getExternalStorageDirectory())?.path ?? '';
     Directory directory = Directory('$sDCardDir/videoBys');
     directory.listSync().forEach((file) {
       print(file.path);
@@ -692,7 +693,7 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
   _otherVideoWidgets() {
     List<AboutVideolist>? aboutVideolist =
         data.courseVideos![selectIndex].aboutVideolist;
-    if (aboutVideolist!.isEmpty) {
+    if (aboutVideolist?.isEmpty ?? true) {
       return Container();
     }
     List<Widget> widgets = [];
@@ -707,21 +708,21 @@ class _VideoPageState2 extends BaseWidgetState<VideoPage2> {
         child: Text("相关知识点", style: KFontConstant.blackTextBigBold()),
       ),
     );
-    for (int i = 0; i < aboutVideolist.length; i++) {
+    for (int i = 0; i < (aboutVideolist?.length ?? 0); i++) {
       widgets.add(
         OtherVideoItem(
           index: i,
-          name: aboutVideolist[i].name ?? '',
-          id: aboutVideolist[i].cvId,
-          time: aboutVideolist[i].time,
-          videoId: aboutVideolist[i].cvId,
+          name: aboutVideolist?[i].name ?? '',
+          id: aboutVideolist?[i].cvId,
+          time: aboutVideolist?[i].time,
+          videoId: aboutVideolist?[i].cvId,
           itemClick: () {
             player.pause();
             Navigator.of(context).push(
               CupertinoPageRoute(
                 builder: (_) => VideoPage2(
-                  id: aboutVideolist[i].cmId,
-                  videoId: aboutVideolist[i].cvId,
+                  id: aboutVideolist?[i].cmId,
+                  videoId: aboutVideolist?[i].cvId,
                 ),
               ),
             );
