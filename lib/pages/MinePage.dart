@@ -9,9 +9,11 @@ import 'package:bayes/network/intercept/showloading_intercept.dart';
 import 'package:bayes/network/requestUtil.dart';
 import 'package:bayes/pages/MyMessagePage.dart';
 import 'package:bayes/pages/tv_page.dart';
+import 'package:bayes/study/XuexiJiluuPage.dart';
 import 'package:bayes/userInfo/ChengjiuPage.dart';
 import 'package:bayes/userInfo/FirstUserInfoPage.dart';
 import 'package:bayes/userInfo/MeInfoPage.dart';
+import 'package:bayes/userInfo/ShouCangPage.dart';
 import 'package:bayes/utils/screen_util.dart';
 import 'package:bayes/widget/image_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -330,11 +332,7 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
     } else if (index == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) =>
-              // ShouCangPage()
-              Text("wth"),
-        ),
+        MaterialPageRoute(builder: (context) => ShouCangPage()),
       );
     } else if (index == 3) {
       showShareDialog(
@@ -398,11 +396,7 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
       //学习记录
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) =>
-              //  XuexiJiluPage()
-              Text("wth"),
-        ),
+        MaterialPageRoute(builder: (context) => XuexiJiluPage()),
       );
     } else if (index == 101) {
       Navigator.push(
