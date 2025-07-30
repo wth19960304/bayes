@@ -15,7 +15,7 @@ class CurriclumDetailPage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (courseVideos!.isEmpty) {
+    if (courseVideos?.isEmpty ?? true) {
       return Container(
         padding: EdgeInsets.all(ScreenUtil.L(30)),
         margin: EdgeInsets.only(top: ScreenUtil.L(30)),
