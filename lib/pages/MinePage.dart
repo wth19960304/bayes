@@ -13,7 +13,9 @@ import 'package:bayes/study/XuexiJiluuPage.dart';
 import 'package:bayes/userInfo/ChengjiuPage.dart';
 import 'package:bayes/userInfo/FirstUserInfoPage.dart';
 import 'package:bayes/userInfo/MeInfoPage.dart';
+import 'package:bayes/userInfo/ShiTiListPage.dart';
 import 'package:bayes/userInfo/ShouCangPage.dart';
+import 'package:bayes/userInfo/XiazaiPage.dart';
 import 'package:bayes/utils/screen_util.dart';
 import 'package:bayes/widget/image_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -401,21 +403,13 @@ class _MinePageState extends BaseInnerWidgetState<MinePage> {
     } else if (index == 101) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) =>
-              // ShitiListPage()
-              Text("wth"),
-        ),
+        MaterialPageRoute(builder: (context) => ShitiListPage()),
       );
     } else if (index == 102) {
       //缓存列表
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) =>
-              //  XiazaiPage()
-              Text("wth"),
-        ),
+        MaterialPageRoute(builder: (context) => XiazaiPage()),
       );
     }
   }
